@@ -56,7 +56,7 @@ public class EventService(ILogger<EventService> logger) : IEventService
             SaslMechanism = SaslMechanism.Plain,
             SaslUsername = configuration[$"EventStreams:{eventName}:UserName"],
             SaslPassword = configuration[$"EventStreams:{eventName}:Password"],
-            SslCaLocation = $"C:/Users/ZZ015M749/source/repos/EventStreamApp/Certificates/cert-eem.pem",
+            SslCaLocation = $"./Certificates/cert-eem.pem",
             GroupId = "app",
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.None,
