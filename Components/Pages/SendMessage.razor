@@ -50,7 +50,8 @@
             int openOptions = MQC.MQOO_INPUT_AS_Q_DEF | MQC.MQOO_OUTPUT;
             MQQueue queue = qManager.AccessQueue(queueName, openOptions);
             MQMessage msg = new MQMessage();
-            msg.WriteUTF(Message);
+            msg.CharacterSet = MQC.CODESET_UTF;
+            msg.WriteString(Message);
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
 
