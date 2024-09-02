@@ -35,17 +35,16 @@
 
     protected override void OnInitialized()
     {
-        connectionProperties.Add(MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED);
-        connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
-        connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
-        connectionProperties.Add(MQC.PORT_PROPERTY, port);
-        Message = fakeDataService.GetFakeTransferData();
-
         hostname = configuration["IbmMq:Hostname"]!;
         channel = configuration["IbmMq:Channel"]!;
         queueManager = configuration["IbmMq:QueueManager"]!;
         queueName = configuration["IbmMq:QueueName"]!;
         port = int.Parse(configuration["IbmMq:Port"]!);
+        connectionProperties.Add(MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED);
+        connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
+        connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
+        connectionProperties.Add(MQC.PORT_PROPERTY, port);
+        Message = fakeDataService.GetFakeTransferData();
     }
 
     private string Message { get; set; } = string.Empty;
