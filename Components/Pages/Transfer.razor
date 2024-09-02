@@ -1,0 +1,133 @@
+﻿@page "/transfer"
+@using IBM.WMQ
+@using System.Runtime.InteropServices
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+
+<PageTitle>DemoApp</PageTitle>
+
+<h1>Transfer List</h1>
+
+<FluentHeader Height="30">All Transfer</FluentHeader>
+<div class="content">
+    <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe">@buttonTitle</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" OnClick="Clear">Clear</FluentButton>
+    <QuickGrid Items="transfers">
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Format="N0" Sortable="true" />
+    </QuickGrid>
+</div>
+
+<FluentHeader Height="30">Transfer >= 1m</FluentHeader>
+<div class="content">
+    <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" OnClick="Clear1m">Clear</FluentButton>
+    <QuickGrid Items="transfers1m">
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Format="N0" Sortable="true" />
+    </QuickGrid>
+</div>
+
+
+
+
+@code {
+    [Inject]
+    private IEventService transferService { get; set; } = default!;
+    [Inject]
+    private IEventService transfer1mService { get; set; } = default!;
+
+    [Inject]
+    private IConfiguration config { get; set; } = default!;
+
+    private IQueryable<EventStreamApp.Models.Transfer> transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+    private IQueryable<EventStreamApp.Models.Transfer> transfers1m = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+
+    private string buttonTitle = "Subscribe";
+    private string buttonTitle1m = "Subscribe";
+
+    private void Clear()
+    {
+        transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+    }
+
+    private void Clear1m()
+    {
+        transfers1m = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+    }
+
+    private void Subscribe()
+    {
+        if (buttonTitle == "Subscribe")
+        {
+            buttonTitle = "Unsubscribe";
+            transferService.Subscribe(config, "TRANSFER", GetTransfer);
+        }
+        else
+        {
+            buttonTitle = "Subscribe";
+            transferService.Unsubscribe();
+        }
+    }
+
+    private void Subscribe1m()
+    {
+        if (buttonTitle1m == "Subscribe")
+        {
+            buttonTitle1m = "Unsubscribe";
+            transfer1mService.Subscribe(config, "TRANSFER-1M-OR-MORE", GetTransfer1m);
+        }
+        else
+        {
+            buttonTitle1m = "Subscribe";
+            transfer1mService.Unsubscribe();
+        }
+    }
+
+    private void GetTransfer(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            JsonSerializerOptions options = JsonSerializerOptions.Web;
+            EventStreamApp.Models.Transfer? trf = JsonSerializer.Deserialize<EventStreamApp.Models.Transfer>(trData, options);
+            if (trf != null)
+            {
+                var existing = transfers.ToList<EventStreamApp.Models.Transfer>();
+                existing.Add(trf);
+                transfers = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
+
+
+    private void GetTransfer1m(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            JsonSerializerOptions options = JsonSerializerOptions.Web;
+            EventStreamApp.Models.Transfer? trf = JsonSerializer.Deserialize<EventStreamApp.Models.Transfer>(trData, options);
+            if (trf != null)
+            {
+                var existing = transfers1m.ToList<EventStreamApp.Models.Transfer>();
+                existing.Add(trf);
+                transfers1m = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        transferService.Unsubscribe();
+        transfer1mService.Unsubscribe();
+        await Task.CompletedTask;
+    }
+}

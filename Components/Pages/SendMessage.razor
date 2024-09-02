@@ -1,0 +1,67 @@
+﻿@page "/message"
+@using IBM.WMQ
+
+@rendermode InteractiveServer
+
+<PageTitle>Send Message</PageTitle>
+
+<h1>Send Message</h1>
+
+<div role="status" style="padding-bottom: 1em;">
+    <FluentTextArea Label="Message" @bind-Value="@Message">
+    </FluentTextArea>
+</div>
+
+<FluentButton Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send</FluentButton>
+
+@code {
+    [Inject]
+    public ILogger<SendMessage> logger { get; set; } = default!;
+
+    // private string TLS_PATTERN_NAME = ".TLS";
+    // private string cipherSpec = "TLS_RSA_WITH_AES_128_CBC_SHA256";
+    // private string cipherSuite = "SSL_RSA_WITH_AES_128_CBC_SHA256";
+
+    private string hostname = "msgmq-ibm-mq-qm-app-space.apps.66d115ea24f464a693a10438.ocp.techzone.ibm.com";
+    private string channel = "MQ.QS.SVRCONN";
+    private string queueManager = "msgmq";
+    private string queue = "TRANSFER";
+    private int port = 443;
+
+    private Hashtable connectionProperties = new Hashtable();
+
+    protected override void OnInitialized()
+    {
+    }
+
+    private string Message { get; set; } = string.Empty;
+
+
+    private void SendMessageToMQ()
+    {
+        connectionProperties.Add(MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED);
+        connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
+        connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
+        connectionProperties.Add(MQC.PORT_PROPERTY, port);
+        //connectionProperties.Add(MQC.SSL_CERT_STORE_PROPERTY, "");
+        //connectionProperties.Add(MQC.SSL_CIPHER_SPEC_PROPERTY, "TLS_RSA_WITH_AES_128_CBC_SHA256");
+
+        try
+        {
+            MQQueueManager qManager = new MQQueueManager(queueManager, connectionProperties);
+            int openOptions = MQC.MQOO_INPUT_AS_Q_DEF | MQC.MQOO_OUTPUT;
+            MQQueue queue = qManager.AccessQueue("TRANSFER", openOptions);
+            MQMessage msg = new MQMessage();
+            msg.WriteUTF("Hello World");
+            MQPutMessageOptions pmo = new MQPutMessageOptions();
+            queue.Put(msg, pmo);
+
+        } catch (Exception ex)
+        {
+            System.IO.File.WriteAllText("C:/Intel/error.txt", ex.ToString());
+        }
+
+    }
+
+    // MQRC_CONNECTION_BROKEN
+}
