@@ -1,0 +1,33 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: es-demo-app
+data:
+  appsettings.json: |-
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "AllowedHosts": "*",
+      "EventStreams": {
+        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.66d115ea24f464a693a10438.ocp.techzone.ibm.com:443",
+        "TRANSFER": {
+          "UserName": "eem-f9ccf3d2-10c5-4375-92d8-0a944f8841ef",
+          "Password": "6368823d-5ad0-4cf5-ad34-ed16fc57303e"
+        },
+        "TRANSFER-1M-OR-MORE": {
+          "username": "eem-30c9a5f4-a33e-406c-8c6b-e5b1b46cbaa6",
+          "password": "eecf4831-abad-4706-85b6-3b66c1b04f66"
+        }
+      },
+      "IbmMq": {
+        "Hostname": "msgmq-ibm-mq",
+        "Channel": "MQ.QS.SVRCONN",
+        "QueueManager": "msgmq",
+        "QueueName": "TRANSFER",
+        "Port": 1414
+      }
+    }

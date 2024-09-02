@@ -12,22 +12,24 @@
     </FluentTextArea>
 </div>
 
+<FluentButton Disabled="@(Message.Length != 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
 <FluentButton Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send</FluentButton>
 
 @code {
     [Inject]
-    public ILogger<SendMessage> logger { get; set; } = default!;
+    private ILogger<SendMessage> logger { get; set; } = default!;
 
+    [Inject]
+    private IFakeDataService fakeDataService { get; set; } = default!;
 
-    // private string TLS_PATTERN_NAME = ".TLS";
-    // private string cipherSpec = "TLS_RSA_WITH_AES_128_CBC_SHA256";
-    // private string cipherSuite = "SSL_RSA_WITH_AES_128_CBC_SHA256";
+    [Inject]
+    private IConfiguration configuration { get; set; } = default!;
 
-    private string hostname = "msgmq-ibm-mq";
-    private string channel = "MQ.QS.SVRCONN";
-    private string queueManager = "msgmq";
-    private string queueName = "TRANSFER";
-    private int port = 1414;
+    private string hostname = string.Empty;
+    private string channel = string.Empty;
+    private string queueManager = string.Empty;
+    private string queueName = string.Empty;
+    private int port;
 
     private Hashtable connectionProperties = new Hashtable();
 
@@ -37,10 +39,21 @@
         connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
         connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
         connectionProperties.Add(MQC.PORT_PROPERTY, port);
+        Message = fakeDataService.GetFakeTransferData();
+
+        hostname = configuration["IbmMq:Hostname"]!;
+        channel = configuration["IbmMq:Channel"]!;
+        queueManager = configuration["IbmMq:QueueManager"]!;
+        queueName = configuration["IbmMq:QueueName"]!;
+        port = int.Parse(configuration["IbmMq:Port"]!);
     }
 
-    private string Message { get; set; } = @"{""id"": ""TRF-0001"", ""source"": ""800345932"", 
-""target"":""503200571"", ""bookedDate"": ""2024-10-23"", ""amount"": 1250000, ""type"": ""BI Fast""}";
+    private string Message { get; set; } = string.Empty;
+
+    private void GetRandomData()
+    {
+        Message = fakeDataService.GetFakeTransferData();
+    }
 
     private void SendMessageToMQ()
     {
@@ -54,15 +67,11 @@
             msg.WriteString(Message);
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
-
+            Message = "";
         }
         catch (Exception ex)
         {
             logger.LogError(ex, ex.Message);
-            //System.IO.File.WriteAllText("C:/Intel/error.txt", ex.ToString());
         }
-
     }
-
-    // MQRC_CONNECTION_BROKEN
 }

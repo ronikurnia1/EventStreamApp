@@ -4,12 +4,15 @@ using Microsoft.FluentUI.AspNetCore.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("config/appsettings.json", optional: true, reloadOnChange: true);
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddFluentUIComponents();
 
 builder.Services.AddTransient<IEventService, EventService>();
+builder.Services.AddSingleton<IFakeDataService, FakeDataService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,57 @@
+﻿kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/route-disabled: 'false'
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    deployment.kubernetes.io/revision: '1'
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"es-demo-app:latest","namespace":"app-space"},"fieldPath":"spec.template.spec.containers[?(@.name==\"es-demo-app\")].image","paused":"false"}]'
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: es-demo-app
+  namespace: app-space
+  labels:
+    app: es-demo-app
+    app.kubernetes.io/component: es-demo-app
+    app.kubernetes.io/instance: es-demo-app
+    app.kubernetes.io/name: es-demo-app
+    app.kubernetes.io/part-of: es-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: es-demo-app
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: es-demo-app
+        deployment: es-demo-app
+    spec:
+      containers:
+        - name: es-demo-app
+          image: 'image-registry.openshift-image-registry.svc:5000/app-space/es-demo-app:latest'
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: config-volume
+            mountPath: /app/config
+        volumes:
+        - name: config-volume
+          configMap:
+            name: es-demo-app
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

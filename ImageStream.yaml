@@ -1,0 +1,22 @@
+﻿kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: es-demo-app
+  namespace: app-space
+  labels:
+    app: es-demo-app
+    app.kubernetes.io/component: es-demo-app
+    app.kubernetes.io/instance: es-demo-app
+    app.kubernetes.io/name: es-demo-app
+    app.kubernetes.io/part-of: es-demo-app
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: 'image-registry.openshift-image-registry.svc:5000/app-space/es-demo-app'
+  tags:
+    - tag: latest

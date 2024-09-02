@@ -1,0 +1,27 @@
+﻿kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: es-demo-app
+  namespace: app-space
+  labels:
+    app: es-demo-app
+    app.kubernetes.io/component: es-demo-app
+    app.kubernetes.io/instance: es-demo-app
+    app.kubernetes.io/name: es-demo-app
+    app.kubernetes.io/part-of: es-demo-app
+  annotations:
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    openshift.io/generated-by: OpenShiftWebConsole
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: es-demo-app
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
