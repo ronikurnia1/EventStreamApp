@@ -18,6 +18,7 @@
     [Inject]
     public ILogger<SendMessage> logger { get; set; } = default!;
 
+
     // private string TLS_PATTERN_NAME = ".TLS";
     // private string cipherSpec = "TLS_RSA_WITH_AES_128_CBC_SHA256";
     // private string cipherSuite = "SSL_RSA_WITH_AES_128_CBC_SHA256";
@@ -56,9 +57,11 @@
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            System.IO.File.WriteAllText("C:/Intel/error.txt", ex.ToString());
+            logger.LogError(ex, ex.Message);
+            //System.IO.File.WriteAllText("C:/Intel/error.txt", ex.ToString());
         }
 
     }
