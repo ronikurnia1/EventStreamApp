@@ -1,6 +1,6 @@
 ﻿@page "/transfer"
 @using IBM.WMQ
-@using System.Runtime.InteropServices
+
 @rendermode InteractiveServer
 @implements IAsyncDisposable
 
@@ -13,11 +13,11 @@
     <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe">@buttonTitle</FluentButton>
     <FluentButton Appearance="Appearance.Accent" OnClick="Clear">Clear</FluentButton>
     <QuickGrid Items="transfers">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Title="From Account" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Title="To Account" Sortable="true" />
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Format="N0" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
     </QuickGrid>
 </div>
 
@@ -26,33 +26,59 @@
     <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
     <FluentButton Appearance="Appearance.Accent" OnClick="Clear1m">Clear</FluentButton>
     <QuickGrid Items="transfers1m">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Title="From Account" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Title="To Account" Sortable="true" />
         <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Format="N0" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
     </QuickGrid>
 </div>
 
-
-
+<FluentHeader Height="30">New Customer with transfer >= 1m</FluentHeader>
+<div class="content">
+    <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
+    <FluentButton Appearance="Appearance.Accent" OnClick="Clear1m">Clear</FluentButton>
+    <QuickGrid Items="customerTransfer">
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Id)" Title="Id" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Name)" Title="Name" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Address)" Title="Address" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.RegisteredDate)" Sortable="true" />
+        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
+    </QuickGrid>
+</div>
 
 @code {
     [Inject]
-    private IEventService? transferService { get; set; } 
-    [Inject]
-    private IEventService? transfer1mService { get; set; } 
+    private IServiceProvider serviceProvider { get; set; } = default!;
 
     [Inject]
     private IConfiguration config { get; set; } = default!;
 
     private IQueryable<EventStreamApp.Models.Transfer> transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
     private IQueryable<EventStreamApp.Models.Transfer> transfers1m = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+    private IQueryable<EventStreamApp.Models.CustomerTransfer> customerTransfer = new List<EventStreamApp.Models.CustomerTransfer>().AsQueryable();
 
     private string buttonTitle = "Subscribe";
     private string buttonTitle1m = "Subscribe";
+    private string buttonTitleCustomer = "Subscribe";
+
+    private BackgroundTask backgroundTask = default!;
+    private KafkaEventHandler? transferHandler;
+    private KafkaEventHandler? transfer1mHandler;
+    private KafkaEventHandler? customerTransferHandler;
+
+    protected override async Task OnInitializedAsync()
+    {
+        backgroundTask = serviceProvider.GetHostedService<BackgroundTask>();
+        await Task.CompletedTask;
+    }
 
     private void Clear()
+    {
+        transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+    }
+
+    private void ClearCustomer()
     {
         transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
     }
@@ -67,26 +93,56 @@
         if (buttonTitle == "Subscribe")
         {
             buttonTitle = "Unsubscribe";
-            transferService?.Subscribe(config, "TRANSFER", GetTransfer);
+            transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
+            backgroundTask.AddHandler(transferHandler);
         }
         else
         {
             buttonTitle = "Subscribe";
-            transferService?.Unsubscribe();
+            if (transferHandler != null)
+            {
+                //transferHandler.Stop();
+                backgroundTask.RemoveHandler(transferHandler);
+            }
         }
     }
+
+    private void SubscribeCustomer()
+    {
+        if (buttonTitleCustomer == "Subscribe")
+        {
+            buttonTitleCustomer = "Unsubscribe";
+            customerTransferHandler = new KafkaEventHandler(GetTransferCustomer, "CUSTOMER.TRANSFER");
+            backgroundTask.AddHandler(customerTransferHandler);
+        }
+        else
+        {
+            buttonTitleCustomer = "Subscribe";
+            if (customerTransferHandler != null)
+            {
+                //transferHandler.Stop();
+                backgroundTask.RemoveHandler(customerTransferHandler);
+            }
+        }
+    }
+
 
     private void Subscribe1m()
     {
         if (buttonTitle1m == "Subscribe")
         {
             buttonTitle1m = "Unsubscribe";
-            transfer1mService?.Subscribe(config, "TRANSFER-1M-OR-MORE", GetTransfer1m);
+            transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
+            backgroundTask.AddHandler(transfer1mHandler);
         }
         else
         {
             buttonTitle1m = "Subscribe";
-            transfer1mService?.Unsubscribe();
+            if (transfer1mHandler != null)
+            {
+                //transfer1mHandler.Stop();
+                backgroundTask.RemoveHandler(transfer1mHandler);
+            }
         }
     }
 
@@ -106,6 +162,21 @@
         });
     }
 
+    private void GetTransferCustomer(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            JsonSerializerOptions options = JsonSerializerOptions.Web;
+            EventStreamApp.Models.CustomerTransfer? csTrf = JsonSerializer.Deserialize<EventStreamApp.Models.CustomerTransfer>(trData, options);
+            if (csTrf != null)
+            {
+                var existing = customerTransfer.ToList<EventStreamApp.Models.CustomerTransfer>();
+                existing.Add(csTrf);
+                customerTransfer = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
 
     private void GetTransfer1m(string trData)
     {
@@ -126,11 +197,9 @@
 
     public async ValueTask DisposeAsync()
     {
-        transferService?.Unsubscribe();
-        transferService = null;
-        transfer1mService?.Unsubscribe();
-        transfer1mService = null;
-
+        backgroundTask.RemoveHandler(transferHandler);
+        backgroundTask.RemoveHandler(transfer1mHandler);
+        backgroundTask.RemoveHandler(customerTransferHandler);
         await Task.CompletedTask;
     }
 }

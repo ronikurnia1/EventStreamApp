@@ -7,6 +7,7 @@ namespace EventStreamApp.Services;
 public interface IFakeDataService
 {
     public string GetFakeTransferData();
+    public string GetFakeCustomerData();
 }
 
 public class FakeDataService : IFakeDataService
@@ -16,7 +17,7 @@ public class FakeDataService : IFakeDataService
 
     public string GetFakeTransferData()
     {
-        var fakeTransfer = new Faker<Transfer>("en")
+        var fakeTransfer = new Faker<Transfer>("id_ID")
             .StrictMode(true)
             .RuleFor(t => t.Id, f => $"TRF-{f.Finance.Account(4)}")
             .RuleFor(t => t.Source, f => $"{f.Finance.Account(8)}")
@@ -28,5 +29,16 @@ public class FakeDataService : IFakeDataService
         return JsonSerializer.Serialize(fakeTransfer.Generate(), jsonSerializerOptions);
     }
 
+    public string GetFakeCustomerData()
+    {
+        var fakeCustomer = new Faker<Customer>("id_ID")
+            .StrictMode(true)
+            .RuleFor(t => t.Id, f => $"CST-{f.Finance.Account(4)}")
+            .RuleFor(t => t.AccountNo, f => $"{f.Finance.Account(8)}")
+            .RuleFor(t => t.Address, f => $"{f.Address.StreetAddress()}, {f.Address.City()}")
+            .RuleFor(t => t.Name, f => f.Name.FullName())
+            .RuleFor(t => t.RegisteredDate, f => DateOnly.FromDateTime(DateTime.Now));
 
+        return JsonSerializer.Serialize(fakeCustomer.Generate(), jsonSerializerOptions);
+    }
 }
