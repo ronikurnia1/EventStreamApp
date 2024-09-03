@@ -5,10 +5,10 @@
 
 <PageTitle>Send Message</PageTitle>
 
-<h1>Send Message</h1>
+<h1>Send transfer message to a queue</h1>
 
 <div role="status" style="padding-bottom: 1em;">
-    <FluentTextArea Rows="5" Cols="50" Label="Message" @bind-Value="@Message">
+    <FluentTextArea Rows="5" Cols="50" Label="@payloadLabel" @bind-Value="@Message">
     </FluentTextArea>
 </div>
 
@@ -32,6 +32,8 @@
     private int port;
 
     private Hashtable connectionProperties = new Hashtable();
+    private string Message { get; set; } = string.Empty;
+    private string payloadLabel = "Payload";
 
     protected override void OnInitialized()
     {
@@ -47,11 +49,11 @@
         Message = fakeDataService.GetFakeTransferData();
     }
 
-    private string Message { get; set; } = string.Empty;
 
     private void GetRandomData()
     {
         Message = fakeDataService.GetFakeTransferData();
+        payloadLabel = "Payload";
     }
 
     private void SendMessageToMQ()
@@ -67,6 +69,7 @@
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
             Message = "";
+            payloadLabel = "Payload sent!";
         }
         catch (Exception ex)
         {

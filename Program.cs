@@ -11,7 +11,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddFluentUIComponents();
 
-builder.Services.AddTransient<IEventService, EventService>();
+builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddSingleton<IFakeDataService, FakeDataService>();
 
 var app = builder.Build();

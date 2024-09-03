@@ -14,7 +14,7 @@ public class EventService(ILogger<EventService> logger) : IEventService
 {
     private IConsumer<Ignore, string>? consumer;
     private readonly ILogger<EventService> logger = logger;
-    private Action<string> subscriberAction = default!;
+    private Action<string>? subscriberAction;
 
     private bool running = false;
 
@@ -37,7 +37,7 @@ public class EventService(ILogger<EventService> logger) : IEventService
             logger.LogInformation($"Event data received: {message}");
             if (message != null)
             {
-                subscriberAction.Invoke(message);
+                subscriberAction!.Invoke(message);
             }
         }
         catch (Exception ex)
@@ -72,6 +72,7 @@ public class EventService(ILogger<EventService> logger) : IEventService
     public void Unsubscribe()
     {
         running = false;
+        subscriberAction = null;
         consumer?.Unsubscribe();
     }
 

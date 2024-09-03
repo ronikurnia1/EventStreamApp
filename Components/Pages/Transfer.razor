@@ -39,9 +39,9 @@
 
 @code {
     [Inject]
-    private IEventService transferService { get; set; } = default!;
+    private IEventService? transferService { get; set; } 
     [Inject]
-    private IEventService transfer1mService { get; set; } = default!;
+    private IEventService? transfer1mService { get; set; } 
 
     [Inject]
     private IConfiguration config { get; set; } = default!;
@@ -67,12 +67,12 @@
         if (buttonTitle == "Subscribe")
         {
             buttonTitle = "Unsubscribe";
-            transferService.Subscribe(config, "TRANSFER", GetTransfer);
+            transferService?.Subscribe(config, "TRANSFER", GetTransfer);
         }
         else
         {
             buttonTitle = "Subscribe";
-            transferService.Unsubscribe();
+            transferService?.Unsubscribe();
         }
     }
 
@@ -81,12 +81,12 @@
         if (buttonTitle1m == "Subscribe")
         {
             buttonTitle1m = "Unsubscribe";
-            transfer1mService.Subscribe(config, "TRANSFER-1M-OR-MORE", GetTransfer1m);
+            transfer1mService?.Subscribe(config, "TRANSFER-1M-OR-MORE", GetTransfer1m);
         }
         else
         {
             buttonTitle1m = "Subscribe";
-            transfer1mService.Unsubscribe();
+            transfer1mService?.Unsubscribe();
         }
     }
 
@@ -126,8 +126,11 @@
 
     public async ValueTask DisposeAsync()
     {
-        transferService.Unsubscribe();
-        transfer1mService.Unsubscribe();
+        transferService?.Unsubscribe();
+        transferService = null;
+        transfer1mService?.Unsubscribe();
+        transfer1mService = null;
+
         await Task.CompletedTask;
     }
 }
