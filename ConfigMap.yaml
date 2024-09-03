@@ -32,7 +32,7 @@ data:
         }
       },
       "IbmMq": {
-        "Hostname": "msgmq-ibm-mq-qm-app-space.apps.66d115ea24f464a693a10438.ocp.techzone.ibm.com",
+        "Hostname": "msgmq-ibm-mq",
         "Channel": "MQ.QS.SVRCONN",
         "QueueManager": "msgmq",
         "Port": 1414
