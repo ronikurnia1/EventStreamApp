@@ -11,8 +11,8 @@
 </FluentStack>
 
 <FluentStack Style="padding-top:1em; padding-bottom:1em" Orientation="Orientation.Vertical">
-    <FluentSelect TOption="string" Label="Select queue name"
-                  Width="200px" Placeholder="Select queue name" Items="queueNames" @bind-Value="selectedQueue" />
+    <FluentSelect TOption="string" Label="Select queue name" ValueChanged="QueueNameChanged"
+                  Width="200px" Placeholder="Select queue name" Items="queueNames" SelectedOption="selectedQueue" />
     <FluentTextArea Rows="3" Cols="80" Label="@payloadLabel" @bind-Value="@Message">
     </FluentTextArea>
 </FluentStack>
@@ -91,4 +91,12 @@
             logger.LogError(ex, ex.Message);
         }
     }
+
+    private void QueueNameChanged(string newValue)
+    {
+        selectedQueue = newValue;
+        Message = string.Empty;
+        StateHasChanged();
+    }
+
 }
