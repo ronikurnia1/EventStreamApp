@@ -13,9 +13,9 @@
         </FluentBodyContent>
     </FluentStack>
     <FluentFooter>
-        <a href="https://www.ibm.com" target="_blank">IBM demo app</a>
+        <a href="https://www.ibm.com/products/event-automation" target="_blank">IBM Event Automation DemoApp</a>
         <FluentSpacer />
-        <a href="https://www.ibm.com/products/event-automation" target="_blank">IBM Event Automation</a>
+        @copyRight
     </FluentFooter>
 </FluentLayout>
 
@@ -24,3 +24,7 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private string copyRight = $"Copyright © {DateTime.Now.Year} - Roni Kurniawan";
+}

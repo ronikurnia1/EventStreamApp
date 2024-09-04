@@ -20,11 +20,11 @@
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="transfers" ShowHover="true">
-    <PropertyColumn Width="20" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-    <PropertyColumn Width="10" Property="@(t => t.Type)" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
 </FluentDataGrid>
 
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
@@ -36,11 +36,11 @@
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="transfers1m" ShowHover="true">
-    <PropertyColumn Width="20" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-    <PropertyColumn Width="10" Property="@(t => t.Type)" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
 </FluentDataGrid>
 
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
@@ -52,11 +52,11 @@
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="customerTransfer" ShowHover="true">
-    <PropertyColumn Width="10" Property="@(t => t.Id)" Title="Id" Sortable="true" />
-    <PropertyColumn Width="20" Property="@(t => t.Name)" Title="Name" Sortable="true" />
-    <PropertyColumn Width="40" Property="@(t => t.Address)" Title="Address" Sortable="true" />
-    <PropertyColumn Width="20" Property="@(t => t.RegisteredDate)" Title="Register date" Sortable="true" />
-    <PropertyColumn Width="30" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
+    <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+    <PropertyColumn Width="25%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+    <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+    <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
 </FluentDataGrid>
 
 @code {
