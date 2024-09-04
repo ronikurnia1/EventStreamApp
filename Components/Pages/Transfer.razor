@@ -6,45 +6,54 @@
 
 <PageTitle>DemoApp</PageTitle>
 
-<h1>Transfer List</h1>
+<FluentStack Style="padding-top:1em; padding-bottom:2em" Orientation="Orientation.Horizontal">
+    <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Flash())"></FluentIcon>
+    <FluentLabel Typo="Typography.H3">Event Subscriptions</FluentLabel>
+</FluentStack>
 
-<FluentHeader Height="30">All Transfer</FluentHeader>
-<div class="content">
+<FluentHeader Height="35">Topic: TRANSFER</FluentHeader>
+<FluentToolbar>
     <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe">@buttonTitle</FluentButton>
     <FluentButton Appearance="Appearance.Accent" OnClick="Clear">Clear</FluentButton>
-    <QuickGrid Items="transfers">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Title="From Account" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Title="To Account" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
-    </QuickGrid>
+</FluentToolbar>
+<div class="content" style="padding-bottom:2em">
+    <FluentDataGrid Items="transfers" >
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Source)" Title="From account" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Target)" Title="To account" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
 </div>
 
-<FluentHeader Height="30">Transfer >= 1m</FluentHeader>
-<div class="content">
+<FluentHeader Height="35">Topic: TRANSFER >= 1m</FluentHeader>
+<FluentToolbar>
     <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
     <FluentButton Appearance="Appearance.Accent" OnClick="Clear1m">Clear</FluentButton>
-    <QuickGrid Items="transfers1m">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Source)" Title="From Account" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Target)" Title="To Account" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
-    </QuickGrid>
+</FluentToolbar>
+<div class="content" style="padding-bottom:2em">
+    <FluentDataGrid Items="transfers1m">
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Source)" Title="From account" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Target)" Title="To account" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
 </div>
 
-<FluentHeader Height="30">New Customer with transfer >= 10m</FluentHeader>
-<div class="content">
+<FluentHeader Height="35">Topic: CUSTOMER.TRANSFER >= 1m</FluentHeader>
+<FluentToolbar>
     <FluentButton Appearance="Appearance.Accent" OnClick="SubscribeCustomer">@buttonTitleCustomer</FluentButton>
     <FluentButton Appearance="Appearance.Accent" OnClick="ClearCustomer">Clear</FluentButton>
-    <QuickGrid Items="customerTransfer">
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Id)" Title="Id" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Name)" Title="Name" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Address)" Title="Address" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.RegisteredDate)" Title="Registered Date" Sortable="true" />
-        <Microsoft.AspNetCore.Components.QuickGrid.PropertyColumn Property="@(t => t.Amount)" Title="Transfer Amount" Align="Microsoft.AspNetCore.Components.QuickGrid.Align.End" Format="N0" Sortable="true" />
-    </QuickGrid>
+</FluentToolbar>
+<div class="content" style="padding-bottom:2em">
+    <FluentDataGrid Items="customerTransfer">
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Id)" Title="Id" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Name)" Title="Name" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Address)" Title="Address" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.RegisteredDate)" Title="Registered date" Sortable="true" />
+        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Title="Transfer amount" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
 </div>
 
 @code {

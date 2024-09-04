@@ -3,19 +3,22 @@
 
 @rendermode InteractiveServer
 
-<PageTitle>Send Message</PageTitle>
+<PageTitle>DemoApp</PageTitle>
 
-<h1>Send a transfer message to queue</h1>
+<FluentStack Style="padding-top:1em;padding-bottom:1em" Orientation="Orientation.Horizontal">
+    <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Mail())"></FluentIcon>
+    <FluentLabel Typo="Typography.H3">Send a message to queue</FluentLabel>
+</FluentStack>
 
-<FluentSelect TOption="string" Label="Select queue name"
-              Width="200px" Placeholder="Select queue name" Items="queueNames" @bind-Value="selectedQueue" />
-<div style="padding-bottom: 1em; padding-top: 1em;">
+<FluentStack Style="padding-top:1em; padding-bottom:1em" Orientation="Orientation.Vertical">
+    <FluentSelect TOption="string" Label="Select queue name"
+                  Width="200px" Placeholder="Select queue name" Items="queueNames" @bind-Value="selectedQueue" />
     <FluentTextArea Rows="3" Cols="80" Label="@payloadLabel" @bind-Value="@Message">
     </FluentTextArea>
-</div>
+</FluentStack>
 
-<FluentButton Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
-<FluentButton Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send</FluentButton>
+<FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
+<FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send</FluentButton>
 
 @code {
     [Inject]
