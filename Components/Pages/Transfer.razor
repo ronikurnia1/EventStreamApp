@@ -19,8 +19,8 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="transfers" ShowHover="true">
-    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+<FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
+    <PropertyColumn  Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
     <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
@@ -35,7 +35,7 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear1m">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="transfers1m" ShowHover="true">
+<FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
     <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
@@ -51,9 +51,9 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCustomer">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="customerTransfer" ShowHover="true">
-    <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
-    <PropertyColumn Width="25%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+<FluentDataGrid Items="customerTransfer" ShowHover="true" ResizableColumns="true">
+    <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
     <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
     <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
     <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
