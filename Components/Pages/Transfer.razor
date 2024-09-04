@@ -11,50 +11,53 @@
     <FluentLabel Typo="Typography.H3">Event Subscriptions</FluentLabel>
 </FluentStack>
 
-<FluentHeader Height="35">Topic: TRANSFER</FluentHeader>
-<FluentToolbar>
-    <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe">@buttonTitle</FluentButton>
-    <FluentButton Appearance="Appearance.Accent" OnClick="Clear">Clear</FluentButton>
-</FluentToolbar>
-<div class="content" style="padding-bottom:2em">
-    <FluentDataGrid Items="transfers" >
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Source)" Title="From account" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Target)" Title="To account" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-</div>
+<FluentHeader Style="background-color:ButtonFace; color:ActiveBorder">
+    Topic: TRANSFER
+    <FluentSpacer />
+    <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitle.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="Subscribe">@buttonTitle</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear">Clear</FluentButton>
+    </FluentToolbar>
+</FluentHeader>
+<FluentDataGrid Items="transfers" ShowHover="true">
+    <PropertyColumn Width="20" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+    <PropertyColumn Width="10" Property="@(t => t.Type)" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+</FluentDataGrid>
 
-<FluentHeader Height="35">Topic: TRANSFER >= 1m</FluentHeader>
-<FluentToolbar>
-    <FluentButton Appearance="Appearance.Accent" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
-    <FluentButton Appearance="Appearance.Accent" OnClick="Clear1m">Clear</FluentButton>
-</FluentToolbar>
-<div class="content" style="padding-bottom:2em">
-    <FluentDataGrid Items="transfers1m">
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Source)" Title="From account" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Target)" Title="To account" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Type)" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-</div>
+<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
+    Topic: TRANSFER >= 1m
+    <FluentSpacer />
+    <FluentToolbar Style="background-color: transparent">
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitle1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear1m">Clear</FluentButton>
+    </FluentToolbar>
+</FluentHeader>
+<FluentDataGrid Items="transfers1m" ShowHover="true">
+    <PropertyColumn Width="20" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+    <PropertyColumn Width="10" Property="@(t => t.Type)" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+</FluentDataGrid>
 
-<FluentHeader Height="35">Topic: CUSTOMER.TRANSFER >= 1m</FluentHeader>
-<FluentToolbar>
-    <FluentButton Appearance="Appearance.Accent" OnClick="SubscribeCustomer">@buttonTitleCustomer</FluentButton>
-    <FluentButton Appearance="Appearance.Accent" OnClick="ClearCustomer">Clear</FluentButton>
-</FluentToolbar>
-<div class="content" style="padding-bottom:2em">
-    <FluentDataGrid Items="customerTransfer">
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Id)" Title="Id" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Name)" Title="Name" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Address)" Title="Address" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.RegisteredDate)" Title="Registered date" Sortable="true" />
-        <Microsoft.FluentUI.AspNetCore.Components.PropertyColumn Property="@(t => t.Amount)" Title="Transfer amount" Align="Microsoft.FluentUI.AspNetCore.Components.Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-</div>
+<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
+    Topic: CUSTOMER.TRANSFER >= 10m
+    <FluentSpacer />
+    <FluentToolbar Style="background-color: transparent">
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitleCustomer.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCustomer">@buttonTitleCustomer</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCustomer">Clear</FluentButton>
+    </FluentToolbar>
+</FluentHeader>
+<FluentDataGrid Items="customerTransfer" ShowHover="true">
+    <PropertyColumn Width="10" Property="@(t => t.Id)" Title="Id" Sortable="true" />
+    <PropertyColumn Width="20" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+    <PropertyColumn Width="40" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+    <PropertyColumn Width="20" Property="@(t => t.RegisteredDate)" Title="Register date" Sortable="true" />
+    <PropertyColumn Width="30" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
+</FluentDataGrid>
 
 @code {
     [Inject]
@@ -75,6 +78,10 @@
     private KafkaEventHandler? transferHandler;
     private KafkaEventHandler? transfer1mHandler;
     private KafkaEventHandler? customerTransferHandler;
+
+
+    private Icon subscribeIcon = new Icons.Regular.Size24.Flash();
+    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff();
 
     protected override async Task OnInitializedAsync()
     {

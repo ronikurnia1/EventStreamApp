@@ -18,7 +18,7 @@
 </FluentStack>
 
 <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
-<FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send</FluentButton>
+<FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send message</FluentButton>
 
 @code {
     [Inject]
