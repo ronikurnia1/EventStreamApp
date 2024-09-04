@@ -18,23 +18,23 @@ public class BackgroundTask(IConfiguration configuration, ILogger<BackgroundTask
     private readonly ILogger<BackgroundTask> logger = logger;
     //private readonly IList<KafkaEventHandler> handlers = new List<KafkaEventHandler>();
 
-    private CancellationToken stoppingToken;
-
     public void AddHandler(KafkaEventHandler handler)
     {
         //handlers.Add(handler);
-        Task.Run(() => Subscribe(handler, stoppingToken));
+        Task.Run(() => Subscribe(handler));
     }
 
     public void RemoveHandler(KafkaEventHandler? handler)
     {
-        handler?.Stop();
+        if (handler != null)
+        {
+            handler.StoppingToken = new CancellationToken(true);
+        }
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        this.stoppingToken = stoppingToken;
-        await Task.CompletedTask;       
+        await Task.CompletedTask;
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ public class BackgroundTask(IConfiguration configuration, ILogger<BackgroundTask
         await base.StopAsync(cancellationToken);
     }
 
-    private void Subscribe(KafkaEventHandler handler, CancellationToken stoppingToken)
+    private void Subscribe(KafkaEventHandler handler)
     {
         var consumerConfig = new ConsumerConfig
         {
@@ -63,9 +63,9 @@ public class BackgroundTask(IConfiguration configuration, ILogger<BackgroundTask
         {
             consumer.Subscribe(handler.Topic);
             logger.LogInformation($"Subscribe to topic: {handler.Topic}");
-            while (!stoppingToken.IsCancellationRequested && !handler.IsStopped)
+            while (!handler.StoppingToken.IsCancellationRequested)
             {
-                var result = consumer.Consume(stoppingToken);
+                var result = consumer.Consume(handler.StoppingToken);
                 var message = result?.Message.Value;
                 if (message != null)
                 {
