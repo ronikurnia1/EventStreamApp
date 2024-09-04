@@ -1,5 +1,6 @@
-﻿@page "/transfer"
+﻿@page "/subscriptions"
 @using IBM.WMQ
+@using EventStreamApp.Models
 
 @rendermode InteractiveServer
 @implements IAsyncDisposable
@@ -15,24 +16,41 @@
     Topic: TRANSFER
     <FluentSpacer />
     <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitle.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="Subscribe">@buttonTitle</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear">Clear</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf">@btnLblSubsTrf</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
-    <PropertyColumn  Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
     <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
     <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
     <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
 </FluentDataGrid>
 
+<FluentHeader Style="background-color:ButtonFace; color:ActiveBorder">
+    Topic: CUSTOMER
+    <FluentSpacer />
+    <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsCst.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCst">@btnLblSubsCst</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
+    </FluentToolbar>
+</FluentHeader>
+<FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
+    <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+    <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+    <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+    <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
+</FluentDataGrid>
+
+
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
     Topic: TRANSFER >= 1m
     <FluentSpacer />
     <FluentToolbar Style="background-color: transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitle1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="Subscribe1m">@buttonTitle1m</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="Clear1m">Clear</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsTrf1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf1m">@btnLblSubsTrf1m</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
@@ -47,8 +65,8 @@
     Topic: CUSTOMER.TRANSFER >= 10m
     <FluentSpacer />
     <FluentToolbar Style="background-color: transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(buttonTitleCustomer.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCustomer">@buttonTitleCustomer</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCustomer">Clear</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsCstTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCstTrf">@btnLblSubsCstTrf</FluentButton>
+        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 <FluentDataGrid Items="customerTransfer" ShowHover="true" ResizableColumns="true">
@@ -60,24 +78,29 @@
 </FluentDataGrid>
 
 @code {
+    private JsonSerializerOptions options = JsonSerializerOptions.Web;
+
     [Inject]
     private IServiceProvider serviceProvider { get; set; } = default!;
 
     [Inject]
     private IConfiguration config { get; set; } = default!;
 
-    private IQueryable<EventStreamApp.Models.Transfer> transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
-    private IQueryable<EventStreamApp.Models.Transfer> transfers1m = new List<EventStreamApp.Models.Transfer>().AsQueryable();
-    private IQueryable<EventStreamApp.Models.CustomerTransfer> customerTransfer = new List<EventStreamApp.Models.CustomerTransfer>().AsQueryable();
+    private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
+    private IQueryable<Transfer> transfers1m = new List<Transfer>().AsQueryable();
+    private IQueryable<CustomerTransfer> customerTransfer = new List<CustomerTransfer>().AsQueryable();
+    private IQueryable<Customer> customers = new List<Customer>().AsQueryable();
 
-    private string buttonTitle = "Subscribe";
-    private string buttonTitle1m = "Subscribe";
-    private string buttonTitleCustomer = "Subscribe";
+    private string btnLblSubsTrf = "Subscribe";
+    private string btnLblSubsTrf1m = "Subscribe";
+    private string btnLblSubsCst = "Subscribe";
+    private string btnLblSubsCstTrf = "Subscribe";
 
     private BackgroundTask backgroundTask = default!;
     private KafkaEventHandler? transferHandler;
     private KafkaEventHandler? transfer1mHandler;
     private KafkaEventHandler? customerTransferHandler;
+    private KafkaEventHandler? customerHandler;
 
 
     private Icon subscribeIcon = new Icons.Regular.Size24.Flash();
@@ -89,76 +112,96 @@
         await Task.CompletedTask;
     }
 
-    private void Clear()
+    private void ClearTrf()
     {
-        transfers = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+        transfers = new List<Transfer>().AsQueryable();
     }
 
-    private void ClearCustomer()
+    private void ClearTrf1m()
     {
-        customerTransfer = new List<EventStreamApp.Models.CustomerTransfer>().AsQueryable();
+        transfers1m = new List<Transfer>().AsQueryable();
     }
 
-    private void Clear1m()
+    private void ClearCstTrf()
     {
-        transfers1m = new List<EventStreamApp.Models.Transfer>().AsQueryable();
+        customerTransfer = new List<CustomerTransfer>().AsQueryable();
     }
 
-    private void Subscribe()
+    private void ClearCst()
     {
-        if (buttonTitle == "Subscribe")
+        customers = new List<Customer>().AsQueryable();
+    }
+
+    private void SubscribeTrf()
+    {
+        if (btnLblSubsTrf == "Subscribe")
         {
-            buttonTitle = "Unsubscribe";
             transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
             backgroundTask.AddHandler(transferHandler);
+            btnLblSubsTrf = "Unsubscribe";
         }
         else
         {
-            buttonTitle = "Subscribe";
             if (transferHandler != null)
             {
-                //transferHandler.Stop();
                 backgroundTask.RemoveHandler(transferHandler);
             }
+            btnLblSubsTrf = "Subscribe";
         }
     }
 
-    private void SubscribeCustomer()
+    private void SubscribeCstTrf()
     {
-        if (buttonTitleCustomer == "Subscribe")
+        if (btnLblSubsCstTrf == "Subscribe")
         {
-            buttonTitleCustomer = "Unsubscribe";
-            customerTransferHandler = new KafkaEventHandler(GetTransferCustomer, "CUSTOMER.TRANSFER");
+            customerTransferHandler = new KafkaEventHandler(GetCustomerTransfer, "CUSTOMER.TRANSFER");
             backgroundTask.AddHandler(customerTransferHandler);
+            btnLblSubsCstTrf = "Unsubscribe";
         }
         else
         {
-            buttonTitleCustomer = "Subscribe";
             if (customerTransferHandler != null)
             {
-                //transferHandler.Stop();
                 backgroundTask.RemoveHandler(customerTransferHandler);
             }
+            btnLblSubsCstTrf = "Subscribe";
         }
     }
 
-
-    private void Subscribe1m()
+    private void SubscribeTrf1m()
     {
-        if (buttonTitle1m == "Subscribe")
+        if (btnLblSubsTrf1m == "Subscribe")
         {
-            buttonTitle1m = "Unsubscribe";
             transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
             backgroundTask.AddHandler(transfer1mHandler);
+            btnLblSubsTrf1m = "Unsubscribe";
         }
         else
         {
-            buttonTitle1m = "Subscribe";
             if (transfer1mHandler != null)
             {
                 //transfer1mHandler.Stop();
                 backgroundTask.RemoveHandler(transfer1mHandler);
             }
+            btnLblSubsTrf1m = "Subscribe";
+        }
+    }
+
+    private void SubscribeCst()
+    {
+        if (btnLblSubsCst == "Subscribe")
+        {
+            customerHandler = new KafkaEventHandler(GetCustomer, "CUSTOMERS");
+            backgroundTask.AddHandler(customerHandler);
+            btnLblSubsCst = "Unsubscribe";
+        }
+        else
+        {
+            if (customerHandler != null)
+            {
+                backgroundTask.RemoveHandler(customerHandler);
+            }
+            btnLblSubsCst = "Subscribe";
         }
     }
 
@@ -166,11 +209,10 @@
     {
         this.InvokeAsync(() =>
         {
-            JsonSerializerOptions options = JsonSerializerOptions.Web;
-            EventStreamApp.Models.Transfer? trf = JsonSerializer.Deserialize<EventStreamApp.Models.Transfer>(trData, options);
+            var trf = JsonSerializer.Deserialize<Transfer>(trData, options);
             if (trf != null)
             {
-                var existing = transfers.ToList<EventStreamApp.Models.Transfer>();
+                var existing = transfers.ToList<Transfer>();
                 existing.Add(trf);
                 transfers = existing.AsQueryable();
                 StateHasChanged();
@@ -178,15 +220,29 @@
         });
     }
 
-    private void GetTransferCustomer(string trData)
+    private void GetCustomer(string trData)
     {
         this.InvokeAsync(() =>
         {
-            JsonSerializerOptions options = JsonSerializerOptions.Web;
-            EventStreamApp.Models.CustomerTransfer? csTrf = JsonSerializer.Deserialize<EventStreamApp.Models.CustomerTransfer>(trData, options);
+            var cst = JsonSerializer.Deserialize<Customer>(trData, options);
+            if (cst != null)
+            {
+                var existing = customers.ToList<Customer>();
+                existing.Add(cst);
+                customers = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
+
+    private void GetCustomerTransfer(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            var csTrf = JsonSerializer.Deserialize<CustomerTransfer>(trData, options);
             if (csTrf != null)
             {
-                var existing = customerTransfer.ToList<EventStreamApp.Models.CustomerTransfer>();
+                var existing = customerTransfer.ToList<CustomerTransfer>();
                 existing.Add(csTrf);
                 customerTransfer = existing.AsQueryable();
                 StateHasChanged();
@@ -198,11 +254,10 @@
     {
         this.InvokeAsync(() =>
         {
-            JsonSerializerOptions options = JsonSerializerOptions.Web;
-            EventStreamApp.Models.Transfer? trf = JsonSerializer.Deserialize<EventStreamApp.Models.Transfer>(trData, options);
+            var trf = JsonSerializer.Deserialize<Transfer>(trData, options);
             if (trf != null)
             {
-                var existing = transfers1m.ToList<EventStreamApp.Models.Transfer>();
+                var existing = transfers1m.ToList<Transfer>();
                 existing.Add(trf);
                 transfers1m = existing.AsQueryable();
                 StateHasChanged();
@@ -216,6 +271,7 @@
         backgroundTask.RemoveHandler(transferHandler);
         backgroundTask.RemoveHandler(transfer1mHandler);
         backgroundTask.RemoveHandler(customerTransferHandler);
+        backgroundTask.RemoveHandler(customerHandler);
         await Task.CompletedTask;
     }
 }
