@@ -7,9 +7,24 @@
     <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Flash())"></FluentIcon>
     <FluentLabel Typo="Typography.H2">Event Automation DemoApp</FluentLabel>
 </FluentStack>
-<p>Welcome to your Event Automation DemoApp</p>
+<p>Welcome to Event Automation DemoApp.</p>
 
-<FluentLabel Style="padding-top:2em" Typo="Typography.Header">
+<p>
+    This DemoApp demonstrates how IBM Event Automation especially its event processing capability to generate a new business insight by combining two different events (topics) in a very simple way.
+</p>
+<FluentLabel Style="padding-top:1em; padding-bottom:0.5em" Typo="Typography.Header">
+    Demo scenario
+</FluentLabel>
+<p>
+    <b>Business requirement:</b><br />
+    How to get notification to trigger another system (e.g. Promotion) if a new customer get registered and do certain transaction (e.g. transfer a money with amount equal or bigger then IDR 10 million) within 24 hours?
+</p>
+<p>
+    <b>Solution:</b><br />
+    Using IBM Event Processing we can solve this requirement easily by processing two different events/topics (e.g. CUSTOMER registration and TRANSFER events) simultaneously and real-time: make a filtering and generate new event (e.g. CUSTOMER.TRANSFER) once the conditions are met (see Event Processing Flow picture below).
+</p>
+
+<FluentLabel Style="padding-top:1em" Typo="Typography.Header">
     Architecture diagram
 </FluentLabel>
 
@@ -19,4 +34,48 @@
     Event Processing Flow
 </FluentLabel>
 
-<img style="padding-top:2em; padding-bottom:4em" src="EventFlow.png" width="700" />
+<img style="padding-top:1em; padding-bottom:1em" src="EventFlow.png" width="700" />
+<p>
+    In this demo we use two different events (Transfer and Customers) as a source for IBM Event Processing to process it (filtering and combining).
+    <br />
+    If the condition meets the requirements then it generates a new event (e.g. Customer.Transfer) as a notification that can be use to trigger other system.
+</p>
+
+<FluentLabel Style="padding-top:1em; padding-bottom:0.5em" Typo="Typography.Header">
+    How to use the DemoApp
+</FluentLabel>
+<ol style="padding-bottom:3em">
+    <li>
+        Navigation to Message page by clicking Message on left-side navigation menu.
+    </li>
+    <li>
+        In this page you can generate random data for both CUSTOMER and TRANSFER events by selecting a queue name and clicking Get random data button. Do not send message yet! By clicking Send message button it will send the message to the IBM MQ and forward it to Event Streams (as you can see on the diagram above)        
+    </li>
+    <li>
+        Navigation to Subscription page by clicking Subscription on left-side navigation menu.
+    </li>
+    <li>
+        In this page you can subscribe to different events/topics (TRANSFER, CUSTOMER, TRANSFER >=1m and CUSTOMER.TRANSFER >= 10m) to see if any data coming in on that particular event/topic. To subscribe to that events/topics click Subscribe button on right side of each event/topic. And click Unsubscribe button (the same button) to stop it. You can also subscribe to all event/topic.
+    </li>
+    <li>
+        Once you have subscribed to all events/topics, then you can navigate back to Message page and start sending some messages both CUSTOMER and TRANSFER. You can see some message coming in on Subscription page. 
+    </li>
+    <li>
+        To simulate the scenario as per business requirement above do the following steps: 
+        <ol>
+            <li>
+                On Message page, generate random data of for CUSTOMER and copy its 'accountNo' value then send it.
+            </li>
+            <li>
+                Generate random data for TRANSFER and change the 'source' value with the 'accountNo' you copied from the above step.
+            </li>
+            <li>
+                Make sure the 'amount' value equal or bigger then 10000000 (1 million) and send it.
+            </li>
+            <li>
+                Navigate to Subscription page and you should see your data appears on CUSTOMER.TRANSFER >= 10m topic
+            </li>
+        </ol>
+    </li>
+</ol>
+
