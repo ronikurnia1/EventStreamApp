@@ -54,6 +54,7 @@
         connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
         connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
         connectionProperties.Add(MQC.PORT_PROPERTY, port);
+        GetRandomData();
     }
 
 
@@ -95,7 +96,7 @@
     private void QueueNameChanged(string newValue)
     {
         selectedQueue = newValue;
-        Message = string.Empty;
+        GetRandomData();
         StateHasChanged();
     }
 
