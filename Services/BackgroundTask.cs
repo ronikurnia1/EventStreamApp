@@ -52,7 +52,7 @@ public class BackgroundTask(IConfiguration configuration, ILogger<BackgroundTask
             SaslMechanism = SaslMechanism.Plain,
             SaslUsername = configuration[$"EventStreams:{handler.Topic}:UserName"],
             SaslPassword = configuration[$"EventStreams:{handler.Topic}:Password"],
-            SslCaLocation = $"./Certificates/cert-eem.pem",
+            SslCaLocation = $"config/cert-eem.pem",
             GroupId = "app",
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.None,
