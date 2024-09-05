@@ -69,7 +69,7 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="customerTransfer" ShowHover="true" ResizableColumns="true">
+<FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
     <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
     <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
     <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
