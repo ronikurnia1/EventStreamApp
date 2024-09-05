@@ -22,10 +22,4 @@
     <ItemGroup>
       <Folder Include="Helpers\" />
     </ItemGroup>
-
-    <ItemGroup>
-      <None Update="Certificates\cert-eem.pem">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
 </Project>

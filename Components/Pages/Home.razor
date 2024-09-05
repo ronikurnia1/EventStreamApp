@@ -17,11 +17,11 @@
 </FluentLabel>
 <p>
     <b>Business requirement:</b><br />
-    How to get notification to trigger another system (e.g. Promotion) if a new customer get registered and do certain transaction (e.g. transfer money with amount equal or bigger then IDR 10 million) within 24 hours?
+    How to get notification to trigger another system (e.g. Promotion) if a new customer get registered and do certain transaction (e.g. transfer money with amount equal or bigger than IDR 10 million) within 24 hours?
 </p>
 <p>
     <b>Solution:</b><br />
-    Using IBM Event Processing we can solve this requirement easily by processing two different events/topics (e.g. CUSTOMER registration and TRANSFER events) simultaneously and real-time: make a filter for checking the conditions and generate a new event if the conditions are met (see Event Processing Flow picture below).
+    Using IBM Event Processing we can solve this requirement easily by creating a event flow (low-code/no-code tool) to process two different events/topics (e.g. CUSTOMER registration and TRANSFER events) simultaneously and real-time: make a filter for checking the conditions and generate a new event if the conditions are met (see Event Processing Flow picture below).
 </p>
 
 <FluentLabel Style="padding-top:1em" Typo="Typography.Header">
