@@ -29,6 +29,10 @@
 </FluentLabel>
 
 <img style="padding-top:2em" src="EventAutomationDemoApp.png" width="700" />
+<p>
+    <b>Note:</b><br />
+    This demo takes message from IBM MQ as a source (which is originally produced by core system), clone and forward it to IBM Event Automation (Event Streams, Event Endpoint Management and Event Processing) for further processing. 
+</p>
 
 <FluentLabel Style="padding-top:2em" Typo="Typography.Header">
     Event Processing Flow
@@ -37,9 +41,7 @@
 <img style="padding-top:1em; padding-bottom:1em" src="EventFlow.png" width="700" />
 <p>
     <b>Note:</b><br />
-    This demo takes two different events (Transfer and Customers) and they might come from different systems. IBM Event Processing can process them: filtering and combining in real-time within certain time window.
-    <br />
-    If the condition meets the requirements then it generates a new event (e.g. Customer.Transfer) as a business insight to trigger other system.
+    Two different events (Transfer and Customers) that might come from different systems get processed by IBM Event Processing: filtering and combining in real-time within certain time window. If the condition meets the requirements then it generates a new event (e.g. Customer.Transfer) as a business insight to trigger other system.
 </p>
 
 <FluentLabel Style="padding-top:1em; padding-bottom:0.5em" Typo="Typography.Header">
@@ -50,7 +52,7 @@
         Navigate to Message page by clicking Message on left-side navigation menu.
     </li>
     <li>
-        In this page you can generate random data for both CUSTOMER and TRANSFER events by selecting a queue name and clicking Get random data button. Do not send message yet! By clicking Send message button it will send the message to the IBM MQ and forward it to Event Streams (as you can see on the diagram above)        
+        In this page you can generate random data for both CUSTOMER and TRANSFER events by selecting a queue name and clicking Get random data button. Do not send message yet! By clicking Send message button it will send the message to the IBM MQ and forward it to Event Streams (as you can see on the diagram above)
     </li>
     <li>
         Navigate to Subscription page by clicking Subscription on left-side navigation menu and it will open new browser tab.
@@ -59,10 +61,10 @@
         In this page you can subscribe to different events/topics (TRANSFER, CUSTOMER, TRANSFER >=1m and CUSTOMER.TRANSFER >= 10m) to see if any data coming in on that particular event/topic. To subscribe to that events/topics click Subscribe button on right side of each event/topic. And click Unsubscribe button (the same button) to stop it. You can also subscribe to all events/topics.
     </li>
     <li>
-        Once you have subscribed to all events/topics, go bak back to Message page (on the previous browser tab) and start sending some messages both CUSTOMER and TRANSFER. You can see some message coming in on Subscription page. 
+        Once you have subscribed to all events/topics, go bak back to Message page (on the previous browser tab) and start sending some messages both CUSTOMER and TRANSFER. You can see some message coming in on Subscription page.
     </li>
     <li>
-        To simulate the scenario as per business requirement above do the following steps: 
+        To simulate the scenario as per business requirement above do the following steps:
         <ol>
             <li>
                 On Message page, generate random data for CUSTOMER and copy its 'accountNo' value (you will use it in the next step) then send it by clicking Send message button.
