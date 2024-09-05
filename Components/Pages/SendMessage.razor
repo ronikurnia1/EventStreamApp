@@ -1,4 +1,5 @@
 ﻿@page "/message"
+@using EventStreamApp.Models
 @using IBM.WMQ
 
 @rendermode InteractiveServer
@@ -11,14 +12,17 @@
 </FluentStack>
 
 <FluentStack Style="padding-top:1em; padding-bottom:1em" Orientation="Orientation.Vertical">
-    <FluentSelect TOption="string" Label="Select queue name" ValueChanged="QueueNameChanged"
+    <FluentSelect Appearance="Appearance.Filled" TOption="string" Label="Select queue name" ValueChanged="QueueNameChanged"
                   Width="200px" Placeholder="Select queue name" Items="queueNames" SelectedOption="selectedQueue" />
-    <FluentTextArea Rows="3" Cols="80" Label="@payloadLabel" @bind-Value="@Message">
+    <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50" Label="@payloadLabel" ValueChanged="UpdateMessage" Value="@Message">
     </FluentTextArea>
 </FluentStack>
 
-<FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
-<FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send message</FluentButton>
+<FluentStack Orientation="Orientation.Horizontal" Width="366px">
+    <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
+    <FluentSpacer />
+    <FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0 || !isMessageValid)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send message</FluentButton>
+</FluentStack>
 
 @code {
     [Inject]
@@ -42,6 +46,7 @@
 
     private string[] queueNames = ["TRANSFER", "CUSTOMER"];
     private string selectedQueue { get; set; } = "CUSTOMER";
+    private bool isMessageValid = true;
 
     protected override void OnInitialized()
     {
@@ -63,12 +68,44 @@
         if (selectedQueue == "CUSTOMER")
         {
             Message = fakeDataService.GetFakeCustomerData();
-            payloadLabel = "Payload";
         }
         else
         {
             Message = fakeDataService.GetFakeTransferData();
-            payloadLabel = "Payload";
+        }
+        payloadLabel = "Payload";
+        isMessageValid = true;
+    }
+
+    private void UpdateMessage(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Message = string.Empty;
+            isMessageValid = false;
+            return;
+        }
+
+        Message = value;
+        var jsonString = value.Trim();
+        if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
+            (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
+        {
+            try
+            {
+                var obj = JsonDocument.Parse(jsonString);
+                isMessageValid = true;
+            }
+            catch (Exception)
+            {
+                payloadLabel = "Invalid payload!";
+                isMessageValid = false;
+            }
+        }
+        else
+        {
+            payloadLabel = "Invalid payload!";
+            isMessageValid = false;
         }
     }
 
@@ -99,5 +136,4 @@
         GetRandomData();
         StateHasChanged();
     }
-
 }

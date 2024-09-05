@@ -13,7 +13,7 @@ public interface IFakeDataService
 public class FakeDataService : IFakeDataService
 {
     private readonly string[] transferTypes = ["BI FAST", "ONLINE", "LLG", "RTGS"];
-    private readonly JsonSerializerOptions jsonSerializerOptions = new(JsonSerializerDefaults.Web);
+    private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
 
     public string GetFakeTransferData()
     {
