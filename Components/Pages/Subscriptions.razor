@@ -78,7 +78,7 @@
 </FluentDataGrid>
 
 @code {
-    private JsonSerializerOptions options = JsonSerializerOptions.Web;
+    private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
     [Inject]
     private IServiceProvider serviceProvider { get; set; } = default!;
