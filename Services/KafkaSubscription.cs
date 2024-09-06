@@ -1,5 +1,4 @@
 ﻿using Confluent.Kafka;
-
 namespace EventStreamApp.Services;
 
 public interface IKafkaSubscription
@@ -15,7 +14,6 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
 
     private Action<string> action = default!;
     private string topic = string.Empty;
-
     private CancellationTokenSource stoppingToken = new CancellationTokenSource();
 
     public void Run(Action<string> action, string topic)
@@ -29,7 +27,6 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
     {
         stoppingToken.Cancel();
     }
-
 
     private void Subscribe(ILogger<KafkaSubscription> runLogger)
     {

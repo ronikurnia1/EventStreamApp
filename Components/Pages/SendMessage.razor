@@ -14,15 +14,15 @@
 <p>
     Imagine there are 2 different systems producing messages and send them to queues
 </p>
-<FluentStack Orientation="Orientation.Horizontal" Width="700px" Style="margin-top:1em">
+<FluentStack Wrap="true" HorizontalAlignment="HorizontalAlignment.Start" Orientation="Orientation.Horizontal" Style="margin-top:1em">
     <div>
-        <FluentHeader Style="margin-bottom:1em">
+        <FluentHeader Style="margin-bottom:1em; margin-top:1em">
             System A produces CUSTOMER msg.
         </FluentHeader>
         <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
         </FluentTextArea>
-        <FluentStack Orientation="Orientation.Horizontal" Width="350px" Style="padding-top:1em">
+        <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
                           Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
             <FluentSpacer />
@@ -32,15 +32,15 @@
         </FluentStack>
     </div>
 
-    <FluentSpacer />
+    <FluentSpacer Width="2" />
     <div>
-        <FluentHeader Style="margin-bottom:1em">
+        <FluentHeader Style="margin-bottom:1em; margin-top:1em">
             System B produces TRANSFER msg.
         </FluentHeader>
         <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
         </FluentTextArea>
-        <FluentStack Orientation="Orientation.Horizontal" Width="350px" Style="padding-top:1em">
+        <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
                           Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
             <FluentSpacer />
@@ -65,7 +65,6 @@
     private string hostname = string.Empty;
     private string channel = string.Empty;
     private string queueManager = string.Empty;
-    //private string queueName = string.Empty;
     private int port;
 
     private Hashtable connectionProperties = new Hashtable();
@@ -83,7 +82,6 @@
         hostname = configuration["IbmMq:Hostname"]!;
         channel = configuration["IbmMq:Channel"]!;
         queueManager = configuration["IbmMq:QueueManager"]!;
-        //queueName = configuration["IbmMq:QueueName"]!;
         port = int.Parse(configuration["IbmMq:Port"]!);
         connectionProperties.Add(MQC.TRANSPORT_PROPERTY, MQC.TRANSPORT_MQSERIES_MANAGED);
         connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
@@ -119,30 +117,10 @@
             payloadCstLabel = "Payload";
             return;
         }
-
         customerMessage = value;
-        var jsonString = value.Trim();
-        if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
-            (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
-        {
-            try
-            {
-                var obj = JsonDocument.Parse(jsonString);
-                isCstMessageValid = true;
-            }
-            catch (Exception)
-            {
-                payloadCstLabel = "Invalid payload!";
-                isCstMessageValid = false;
-            }
-        }
-        else
-        {
-            payloadCstLabel = "Invalid payload!";
-            isCstMessageValid = false;
-        }
+        isCstMessageValid = IsValidJsonString(value);
+        payloadCstLabel = isCstMessageValid ? "Payload" : "Invalid payload!";
     }
-
 
     private void UpdateTransferMessage(string value)
     {
@@ -153,29 +131,11 @@
             payloadTrfLabel = "Payload";
             return;
         }
-
         transferMessage = value;
-        var jsonString = value.Trim();
-        if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
-            (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
-        {
-            try
-            {
-                var obj = JsonDocument.Parse(jsonString);
-                isTrfMessageValid = true;
-            }
-            catch (Exception)
-            {
-                payloadTrfLabel = "Invalid payload!";
-                isTrfMessageValid = false;
-            }
-        }
-        else
-        {
-            payloadTrfLabel = "Invalid payload!";
-            isTrfMessageValid = false;
-        }
+        isTrfMessageValid = IsValidJsonString(value);
+        payloadTrfLabel = isTrfMessageValid ? "Payload" : "Invalid payload!";
     }
+
     private void SendMessageToMQ(string queueName, string messageToSend)
     {
         try
@@ -212,4 +172,28 @@
             logger.LogError(ex, ex.Message);
         }
     }
+
+    private bool IsValidJsonString(string value)
+    {
+        var jsonString = value.Trim();
+        if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
+            (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
+        {
+            try
+            {
+                var obj = JsonDocument.Parse(jsonString);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
 }

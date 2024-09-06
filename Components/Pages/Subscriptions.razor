@@ -1,5 +1,4 @@
 ﻿@page "/subscriptions"
-@using IBM.WMQ
 @using EventStreamApp.Models
 
 @rendermode InteractiveServer
@@ -119,7 +118,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //backgroundTask = serviceProvider.GetHostedService<BackgroundTask>();
         await Task.CompletedTask;
     }
 
@@ -148,17 +146,11 @@ else
     {
         if (btnLblSubsTrf == "Subscribe")
         {
-            // transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
-            // backgroundTask.AddHandler(transferHandler);
             trfSubs.Run(GetTransfer, "TRANSFER");
             btnLblSubsTrf = "Unsubscribe";
         }
         else
         {
-            // if (transferHandler != null)
-            // {
-            //     backgroundTask.RemoveHandler(transferHandler);
-            // }
             trfSubs.Stop();
             btnLblSubsTrf = "Subscribe";
         }
@@ -168,17 +160,11 @@ else
     {
         if (btnLblSubsCstTrf == "Subscribe")
         {
-            // customerTransferHandler = new KafkaEventHandler(GetCustomerTransfer, "CUSTOMER.TRANSFER");
-            // backgroundTask.AddHandler(customerTransferHandler);
             cstTrfSubs.Run(GetCustomerTransfer, "CUSTOMER.TRANSFER");
             btnLblSubsCstTrf = "Unsubscribe";
         }
         else
         {
-            // if (customerTransferHandler != null)
-            // {
-            //     backgroundTask.RemoveHandler(customerTransferHandler);
-            // }
             cstTrfSubs?.Stop();
             btnLblSubsCstTrf = "Subscribe";
         }
@@ -188,18 +174,11 @@ else
     {
         if (btnLblSubsTrf1m == "Subscribe")
         {
-            // transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
-            // backgroundTask.AddHandler(transfer1mHandler);
             trf1mSubs.Run(GetTransfer1m, "TRANSFER-1M-OR-MORE");
             btnLblSubsTrf1m = "Unsubscribe";
         }
         else
         {
-            // if (transfer1mHandler != null)
-            // {
-            //     //transfer1mHandler.Stop();
-            //     backgroundTask.RemoveHandler(transfer1mHandler);
-            // }
             trf1mSubs?.Stop();
             btnLblSubsTrf1m = "Subscribe";
         }
@@ -209,17 +188,11 @@ else
     {
         if (btnLblSubsCst == "Subscribe")
         {
-            //customerHandler = new KafkaEventHandler(GetCustomer, "CUSTOMERS");
-            //backgroundTask.AddHandler(customerHandler);
             cstSubs.Run(GetCustomer, "CUSTOMERS");
             btnLblSubsCst = "Unsubscribe";
         }
         else
         {
-            // if (customerHandler != null)
-            // {
-            //     backgroundTask.RemoveHandler(customerHandler);
-            // }
             cstSubs?.Stop();
             btnLblSubsCst = "Subscribe";
         }
@@ -285,7 +258,6 @@ else
             }
         });
     }
-
 
     public async ValueTask DisposeAsync()
     {
