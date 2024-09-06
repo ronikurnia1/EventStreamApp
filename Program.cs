@@ -11,8 +11,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddFluentUIComponents();
 
-//builder.Services.AddHostedService<BackgroundTask>();
 builder.Services.AddSingleton<IFakeDataService, FakeDataService>();
+builder.Services.AddTransient<IKafkaSubscription, KafkaSubscription>();
 
 var app = builder.Build();
 

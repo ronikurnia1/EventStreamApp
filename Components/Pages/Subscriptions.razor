@@ -94,14 +94,6 @@ else
 @code {
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
-    // [Inject]
-    // private IServiceProvider serviceProvider { get; set; } = default!;
-
-    [Inject]
-    private IConfiguration config { get; set; } = default!;
-    [Inject]
-    private ILoggerFactory loggerFactory { get; set; } = default!;
-
     private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
     private IQueryable<Transfer> transfers1m = new List<Transfer>().AsQueryable();
     private IQueryable<CustomerTransfer> customerTransfer = new List<CustomerTransfer>().AsQueryable();
@@ -112,16 +104,14 @@ else
     private string btnLblSubsCst = "Subscribe";
     private string btnLblSubsCstTrf = "Subscribe";
 
-    //private BackgroundTask backgroundTask = default!;
-    // private KafkaEventHandler? transferHandler;
-    // private KafkaEventHandler? transfer1mHandler;
-    // private KafkaEventHandler? customerTransferHandler;
-    // private KafkaEventHandler? customerHandler;
-
-    private KafkaSubscription? trfSubs;
-    private KafkaSubscription? trf1mSubs;
-    private KafkaSubscription? cstTrfSubs;
-    private KafkaSubscription? cstSubs;
+    [Inject]
+    private IKafkaSubscription trfSubs { get; set; } = default!;
+    [Inject]
+    private IKafkaSubscription trf1mSubs { get; set; } = default!;
+    [Inject]
+    private IKafkaSubscription cstTrfSubs { get; set; } = default!;
+    [Inject]
+    private IKafkaSubscription cstSubs { get; set; } = default!;
 
 
     private Icon subscribeIcon = new Icons.Regular.Size24.Flash();
@@ -160,8 +150,7 @@ else
         {
             // transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
             // backgroundTask.AddHandler(transferHandler);
-            trfSubs = new KafkaSubscription(GetTransfer, "TRANSFER", config, loggerFactory);
-            trfSubs.Run();
+            trfSubs.Run(GetTransfer, "TRANSFER");
             btnLblSubsTrf = "Unsubscribe";
         }
         else
@@ -170,7 +159,7 @@ else
             // {
             //     backgroundTask.RemoveHandler(transferHandler);
             // }
-            trfSubs?.Stop();
+            trfSubs.Stop();
             btnLblSubsTrf = "Subscribe";
         }
     }
@@ -181,8 +170,7 @@ else
         {
             // customerTransferHandler = new KafkaEventHandler(GetCustomerTransfer, "CUSTOMER.TRANSFER");
             // backgroundTask.AddHandler(customerTransferHandler);
-            cstTrfSubs = new KafkaSubscription(GetCustomerTransfer, "CUSTOMER.TRANSFER", config, loggerFactory);
-            cstTrfSubs.Run();
+            cstTrfSubs.Run(GetCustomerTransfer, "CUSTOMER.TRANSFER");
             btnLblSubsCstTrf = "Unsubscribe";
         }
         else
@@ -202,8 +190,7 @@ else
         {
             // transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
             // backgroundTask.AddHandler(transfer1mHandler);
-            trf1mSubs = new KafkaSubscription(GetTransfer1m, "TRANSFER-1M-OR-MORE", config, loggerFactory);
-            trf1mSubs.Run();
+            trf1mSubs.Run(GetTransfer1m, "TRANSFER-1M-OR-MORE");
             btnLblSubsTrf1m = "Unsubscribe";
         }
         else
@@ -224,8 +211,7 @@ else
         {
             //customerHandler = new KafkaEventHandler(GetCustomer, "CUSTOMERS");
             //backgroundTask.AddHandler(customerHandler);
-            cstSubs = new KafkaSubscription(GetCustomer, "CUSTOMERS", config, loggerFactory);
-            cstSubs.Run();
+            cstSubs.Run(GetCustomer, "CUSTOMERS");
             btnLblSubsCst = "Unsubscribe";
         }
         else
@@ -303,10 +289,10 @@ else
 
     public async ValueTask DisposeAsync()
     {
-        // backgroundTask.RemoveHandler(transferHandler);
-        // backgroundTask.RemoveHandler(transfer1mHandler);
-        // backgroundTask.RemoveHandler(customerTransferHandler);
-        // backgroundTask.RemoveHandler(customerHandler);
+        trfSubs.Stop();
+        trf1mSubs.Stop();
+        cstTrfSubs.Stop();
+        cstSubs.Stop();
         await Task.CompletedTask;
     }
 }

@@ -2,19 +2,27 @@
 
 namespace EventStreamApp.Services;
 
-public class KafkaSubscription(Action<string> action, string topic,
-    IConfiguration configuration, ILoggerFactory factory)
+public interface IKafkaSubscription
 {
-    private readonly ILogger<KafkaSubscription> logger = factory.CreateLogger<KafkaSubscription>();
-    private readonly Action<string> action = action;
-    private readonly string topic = topic;
+    public void Run(Action<string> action, string topic);
+    public void Stop();
+}
+
+public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscription> logger): IKafkaSubscription
+{
+    private readonly ILogger<KafkaSubscription> logger = logger;
     private readonly IConfiguration configuration = configuration;
+
+    private Action<string> action = default!;
+    private string topic = string.Empty;
+
     private CancellationTokenSource stoppingToken = new CancellationTokenSource();
 
-    public void Run()
+    public void Run(Action<string> action, string topic)
     {
+        this.action = action;
+        this.topic = topic;
         Task.Run(() => Subscribe(logger));
-        //await Task.WhenAll(task);
     }
 
     public void Stop()
