@@ -13,12 +13,12 @@
 
 <FluentStack Style="padding-top:1em; padding-bottom:1em" Orientation="Orientation.Vertical">
     <FluentSelect Appearance="Appearance.Filled" TOption="string" Label="Select queue name" ValueChanged="QueueNameChanged"
-                  Width="200px" Placeholder="Select queue name" Items="queueNames" SelectedOption="selectedQueue" />
+                  Width="356px" Placeholder="Select queue name" Items="queueNames" SelectedOption="selectedQueue" />
     <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50" Label="@payloadLabel" ValueChanged="UpdateMessage" Value="@Message">
     </FluentTextArea>
 </FluentStack>
 
-<FluentStack Orientation="Orientation.Horizontal" Width="366px">
+<FluentStack Orientation="Orientation.Horizontal" Width="356px">
     <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
     <FluentSpacer />
     <FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0 || !isMessageValid)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send message</FluentButton>
