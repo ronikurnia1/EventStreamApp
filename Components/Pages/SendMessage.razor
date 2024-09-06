@@ -190,10 +190,12 @@
             queue.Put(msg, pmo);
             if (queueName == "CUSTOMER")
             {
+                customerMessage = string.Empty;
                 payloadCstLabel = "Payload sent!";
             }
             else
             {
+                transferMessage = string.Empty;
                 payloadTrfLabel = "Payload sent!";
             }
         }
