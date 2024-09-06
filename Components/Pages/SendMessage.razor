@@ -17,7 +17,11 @@
 <FluentStack Wrap="true" HorizontalAlignment="HorizontalAlignment.Start" Orientation="Orientation.Horizontal" Style="margin-top:1em">
     <div>
         <FluentHeader Style="margin-bottom:1em; margin-top:1em">
-            System A produces CUSTOMER msg.
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                <span>System A</span>
+                <FluentDivider Style="height: 40px;" Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+                <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Produce CUSTOMER msg.</FluentLabel>
+            </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
@@ -35,7 +39,11 @@
     <FluentSpacer Width="2" />
     <div>
         <FluentHeader Style="margin-bottom:1em; margin-top:1em">
-            System B produces TRANSFER msg.
+            <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center">
+                <span>System B</span>
+                <FluentDivider Style="height: 40px;" Role="DividerRole.Presentation" Orientation="Orientation.Vertical"></FluentDivider>
+                <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Produce TRANSFER msg.</FluentLabel>
+            </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
