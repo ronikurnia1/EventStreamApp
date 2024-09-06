@@ -8,21 +8,49 @@
 
 <FluentStack Style="padding-top:1em;padding-bottom:1em" Orientation="Orientation.Horizontal">
     <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Mail())"></FluentIcon>
-    <FluentLabel Typo="Typography.H3">Send a message to queue</FluentLabel>
+    <FluentLabel Typo="Typography.H3">Send messages to IBM MQ</FluentLabel>
 </FluentStack>
 
-<FluentStack Style="padding-top:1em; padding-bottom:1em" Orientation="Orientation.Vertical">
-    <FluentSelect Appearance="Appearance.Filled" TOption="string" Label="Select queue name" ValueChanged="QueueNameChanged"
-                  Width="356px" Placeholder="Select queue name" Items="queueNames" SelectedOption="selectedQueue" />
-    <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50" Label="@payloadLabel" ValueChanged="UpdateMessage" Value="@Message">
-    </FluentTextArea>
-</FluentStack>
+<p>
+    Imagine there are 2 different systems producing messages and send them to queues
+</p>
+<FluentStack Orientation="Orientation.Horizontal" Width="700px" Style="margin-top:1em">
+    <div>
+        <FluentHeader Style="margin-bottom:1em">
+            System A produces CUSTOMER msg.
+        </FluentHeader>
+        <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
+                        Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
+        </FluentTextArea>
+        <FluentStack Orientation="Orientation.Horizontal" Width="350px" Style="padding-top:1em">
+            <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
+                          Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
+            <FluentSpacer />
+            <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
+                          Disabled="@(customerMessage.Length == 0 || !isCstMessageValid)"
+                          Appearance="Appearance.Accent" @onclick="@(()=>SendMessageToMQ("CUSTOMER", customerMessage))">Send message</FluentButton>
+        </FluentStack>
+    </div>
 
-<FluentStack Orientation="Orientation.Horizontal" Width="356px">
-    <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())" Disabled="@(selectedQueue.Length == 0)" Appearance="Appearance.Accent" @onclick="GetRandomData">Get random data</FluentButton>
     <FluentSpacer />
-    <FluentButton IconStart="@(new Icons.Regular.Size24.Send())" Disabled="@(Message.Length == 0 || !isMessageValid)" Appearance="Appearance.Accent" @onclick="SendMessageToMQ">Send message</FluentButton>
+    <div>
+        <FluentHeader Style="margin-bottom:1em">
+            System B produces TRANSFER msg.
+        </FluentHeader>
+        <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
+                        Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
+        </FluentTextArea>
+        <FluentStack Orientation="Orientation.Horizontal" Width="350px" Style="padding-top:1em">
+            <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
+                          Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
+            <FluentSpacer />
+            <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
+                          Disabled="@(transferMessage.Length == 0 || !isTrfMessageValid)"
+                          Appearance="Appearance.Accent" @onclick="@(() => SendMessageToMQ("TRANSFER", transferMessage))">Send message</FluentButton>
+        </FluentStack>
+    </div>
 </FluentStack>
+
 
 @code {
     [Inject]
@@ -41,12 +69,14 @@
     private int port;
 
     private Hashtable connectionProperties = new Hashtable();
-    private string Message { get; set; } = string.Empty;
-    private string payloadLabel = "Payload";
+    private string customerMessage { get; set; } = string.Empty;
+    private string transferMessage { get; set; } = string.Empty;
 
-    private string[] queueNames = ["TRANSFER", "CUSTOMER"];
-    private string selectedQueue { get; set; } = "CUSTOMER";
-    private bool isMessageValid = true;
+    private string payloadCstLabel = "Payload";
+    private string payloadTrfLabel = "Payload";
+
+    private bool isTrfMessageValid = true;
+    private bool isCstMessageValid = true;
 
     protected override void OnInitialized()
     {
@@ -59,34 +89,38 @@
         connectionProperties.Add(MQC.HOST_NAME_PROPERTY, hostname);
         connectionProperties.Add(MQC.CHANNEL_PROPERTY, channel);
         connectionProperties.Add(MQC.PORT_PROPERTY, port);
-        GetRandomData();
+        GetRandomData("CUSTOMER");
+        GetRandomData("TRANSFER");
     }
 
 
-    private void GetRandomData()
+    private void GetRandomData(string dataType)
     {
-        if (selectedQueue == "CUSTOMER")
+        if (dataType == "CUSTOMER")
         {
-            Message = fakeDataService.GetFakeCustomerData();
+            customerMessage = fakeDataService.GetFakeCustomerData();
+            payloadCstLabel = "Payload";
+            isCstMessageValid = true;
         }
         else
         {
-            Message = fakeDataService.GetFakeTransferData();
+            transferMessage = fakeDataService.GetFakeTransferData();
+            payloadTrfLabel = "Payload";
+            isTrfMessageValid = true;
         }
-        payloadLabel = "Payload";
-        isMessageValid = true;
     }
 
-    private void UpdateMessage(string value)
+    private void UpdateCustomerMessage(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            Message = string.Empty;
-            isMessageValid = false;
+            customerMessage = string.Empty;
+            isCstMessageValid = false;
+            payloadCstLabel = "Payload";
             return;
         }
 
-        Message = value;
+        customerMessage = value;
         var jsonString = value.Trim();
         if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
             (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
@@ -94,46 +128,86 @@
             try
             {
                 var obj = JsonDocument.Parse(jsonString);
-                isMessageValid = true;
+                isCstMessageValid = true;
             }
             catch (Exception)
             {
-                payloadLabel = "Invalid payload!";
-                isMessageValid = false;
+                payloadCstLabel = "Invalid payload!";
+                isCstMessageValid = false;
             }
         }
         else
         {
-            payloadLabel = "Invalid payload!";
-            isMessageValid = false;
+            payloadCstLabel = "Invalid payload!";
+            isCstMessageValid = false;
         }
     }
 
-    private void SendMessageToMQ()
+
+    private void UpdateTransferMessage(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            transferMessage = string.Empty;
+            isTrfMessageValid = false;
+            payloadTrfLabel = "Payload";
+            return;
+        }
+
+        transferMessage = value;
+        var jsonString = value.Trim();
+        if ((jsonString.StartsWith("{") && jsonString.EndsWith("}")) || // For object
+            (jsonString.StartsWith("[") && jsonString.EndsWith("]")))   // For array
+        {
+            try
+            {
+                var obj = JsonDocument.Parse(jsonString);
+                isTrfMessageValid = true;
+            }
+            catch (Exception)
+            {
+                payloadTrfLabel = "Invalid payload!";
+                isTrfMessageValid = false;
+            }
+        }
+        else
+        {
+            payloadTrfLabel = "Invalid payload!";
+            isTrfMessageValid = false;
+        }
+    }
+    private void SendMessageToMQ(string queueName, string messageToSend)
     {
         try
         {
             MQQueueManager qManager = new MQQueueManager(queueManager, connectionProperties);
             int openOptions = MQC.MQOO_INPUT_AS_Q_DEF | MQC.MQOO_OUTPUT;
-            MQQueue queue = qManager.AccessQueue(selectedQueue, openOptions);
+            MQQueue queue = qManager.AccessQueue(queueName, openOptions);
             MQMessage msg = new MQMessage();
             msg.CharacterSet = MQC.CODESET_UTF;
-            msg.WriteString(Message);
+            msg.WriteString(messageToSend);
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
-            Message = "";
-            payloadLabel = "Payload sent!";
+            if (queueName == "CUSTOMER")
+            {
+                payloadCstLabel = "Payload sent!";
+            }
+            else
+            {
+                payloadTrfLabel = "Payload sent!";
+            }
         }
         catch (Exception ex)
         {
+            if (queueName == "CUSTOMER")
+            {
+                payloadCstLabel = $"Error sending payload: {ex.Message}";
+            }
+            else
+            {
+                payloadTrfLabel = $"Error sending payload: {ex.Message}";
+            }
             logger.LogError(ex, ex.Message);
         }
-    }
-
-    private void QueueNameChanged(string newValue)
-    {
-        selectedQueue = newValue;
-        GetRandomData();
-        StateHasChanged();
     }
 }
