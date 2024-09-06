@@ -31,6 +31,6 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode(o=> o.ContentSecurityFrameAncestorsPolicy ="'none'");
+    .AddInteractiveServerRenderMode();
 
 app.Run();
