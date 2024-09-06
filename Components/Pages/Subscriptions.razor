@@ -80,11 +80,13 @@
 @code {
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
-    [Inject]
-    private IServiceProvider serviceProvider { get; set; } = default!;
+    // [Inject]
+    // private IServiceProvider serviceProvider { get; set; } = default!;
 
     [Inject]
     private IConfiguration config { get; set; } = default!;
+    [Inject]
+    private ILoggerFactory loggerFactory { get; set; } = default!;
 
     private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
     private IQueryable<Transfer> transfers1m = new List<Transfer>().AsQueryable();
@@ -96,11 +98,16 @@
     private string btnLblSubsCst = "Subscribe";
     private string btnLblSubsCstTrf = "Subscribe";
 
-    private BackgroundTask backgroundTask = default!;
-    private KafkaEventHandler? transferHandler;
-    private KafkaEventHandler? transfer1mHandler;
-    private KafkaEventHandler? customerTransferHandler;
-    private KafkaEventHandler? customerHandler;
+    //private BackgroundTask backgroundTask = default!;
+    // private KafkaEventHandler? transferHandler;
+    // private KafkaEventHandler? transfer1mHandler;
+    // private KafkaEventHandler? customerTransferHandler;
+    // private KafkaEventHandler? customerHandler;
+
+    private KafkaSubscription? trfSubs;
+    private KafkaSubscription? trf1mSubs;
+    private KafkaSubscription? cstTrfSubs;
+    private KafkaSubscription? cstSubs;
 
 
     private Icon subscribeIcon = new Icons.Regular.Size24.Flash();
@@ -108,7 +115,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        backgroundTask = serviceProvider.GetHostedService<BackgroundTask>();
+        //backgroundTask = serviceProvider.GetHostedService<BackgroundTask>();
         await Task.CompletedTask;
     }
 
@@ -136,16 +143,19 @@
     {
         if (btnLblSubsTrf == "Subscribe")
         {
-            transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
-            backgroundTask.AddHandler(transferHandler);
+            // transferHandler = new KafkaEventHandler(GetTransfer, "TRANSFER");
+            // backgroundTask.AddHandler(transferHandler);
+            trfSubs = new KafkaSubscription(GetTransfer, "TRANSFER", config, loggerFactory);
+            trfSubs.Run();
             btnLblSubsTrf = "Unsubscribe";
         }
         else
         {
-            if (transferHandler != null)
-            {
-                backgroundTask.RemoveHandler(transferHandler);
-            }
+            // if (transferHandler != null)
+            // {
+            //     backgroundTask.RemoveHandler(transferHandler);
+            // }
+            trfSubs?.Stop();
             btnLblSubsTrf = "Subscribe";
         }
     }
@@ -154,16 +164,19 @@
     {
         if (btnLblSubsCstTrf == "Subscribe")
         {
-            customerTransferHandler = new KafkaEventHandler(GetCustomerTransfer, "CUSTOMER.TRANSFER");
-            backgroundTask.AddHandler(customerTransferHandler);
+            // customerTransferHandler = new KafkaEventHandler(GetCustomerTransfer, "CUSTOMER.TRANSFER");
+            // backgroundTask.AddHandler(customerTransferHandler);
+            cstTrfSubs = new KafkaSubscription(GetCustomerTransfer, "CUSTOMER.TRANSFER", config, loggerFactory);
+            cstTrfSubs.Run();
             btnLblSubsCstTrf = "Unsubscribe";
         }
         else
         {
-            if (customerTransferHandler != null)
-            {
-                backgroundTask.RemoveHandler(customerTransferHandler);
-            }
+            // if (customerTransferHandler != null)
+            // {
+            //     backgroundTask.RemoveHandler(customerTransferHandler);
+            // }
+            cstTrfSubs?.Stop();
             btnLblSubsCstTrf = "Subscribe";
         }
     }
@@ -172,17 +185,20 @@
     {
         if (btnLblSubsTrf1m == "Subscribe")
         {
-            transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
-            backgroundTask.AddHandler(transfer1mHandler);
+            // transfer1mHandler = new KafkaEventHandler(GetTransfer1m, "TRANSFER-1M-OR-MORE");
+            // backgroundTask.AddHandler(transfer1mHandler);
+            trf1mSubs = new KafkaSubscription(GetTransfer1m, "TRANSFER-1M-OR-MORE", config, loggerFactory);
+            trf1mSubs.Run();
             btnLblSubsTrf1m = "Unsubscribe";
         }
         else
         {
-            if (transfer1mHandler != null)
-            {
-                //transfer1mHandler.Stop();
-                backgroundTask.RemoveHandler(transfer1mHandler);
-            }
+            // if (transfer1mHandler != null)
+            // {
+            //     //transfer1mHandler.Stop();
+            //     backgroundTask.RemoveHandler(transfer1mHandler);
+            // }
+            trf1mSubs?.Stop();
             btnLblSubsTrf1m = "Subscribe";
         }
     }
@@ -191,19 +207,25 @@
     {
         if (btnLblSubsCst == "Subscribe")
         {
-            customerHandler = new KafkaEventHandler(GetCustomer, "CUSTOMERS");
-            backgroundTask.AddHandler(customerHandler);
+            //customerHandler = new KafkaEventHandler(GetCustomer, "CUSTOMERS");
+            //backgroundTask.AddHandler(customerHandler);
+            cstSubs = new KafkaSubscription(GetCustomer, "CUSTOMERS", config, loggerFactory);
+            cstSubs.Run();
             btnLblSubsCst = "Unsubscribe";
         }
         else
         {
-            if (customerHandler != null)
-            {
-                backgroundTask.RemoveHandler(customerHandler);
-            }
+            // if (customerHandler != null)
+            // {
+            //     backgroundTask.RemoveHandler(customerHandler);
+            // }
+            cstSubs?.Stop();
             btnLblSubsCst = "Subscribe";
         }
     }
+
+
+
 
     private void GetTransfer(string trData)
     {
@@ -268,10 +290,10 @@
 
     public async ValueTask DisposeAsync()
     {
-        backgroundTask.RemoveHandler(transferHandler);
-        backgroundTask.RemoveHandler(transfer1mHandler);
-        backgroundTask.RemoveHandler(customerTransferHandler);
-        backgroundTask.RemoveHandler(customerHandler);
+        // backgroundTask.RemoveHandler(transferHandler);
+        // backgroundTask.RemoveHandler(transfer1mHandler);
+        // backgroundTask.RemoveHandler(customerTransferHandler);
+        // backgroundTask.RemoveHandler(customerHandler);
         await Task.CompletedTask;
     }
 }

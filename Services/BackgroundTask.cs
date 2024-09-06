@@ -35,6 +35,7 @@ public class BackgroundTask(IConfiguration configuration, ILogger<BackgroundTask
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.CompletedTask;
+        //await Task.Run(() => { }, stoppingToken);
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)
