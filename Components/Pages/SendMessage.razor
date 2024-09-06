@@ -19,7 +19,7 @@
         <FluentHeader Style="margin-bottom:1em; margin-top:1em">
             System A produces CUSTOMER msg.
         </FluentHeader>
-        <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
+        <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
@@ -37,7 +37,7 @@
         <FluentHeader Style="margin-bottom:1em; margin-top:1em">
             System B produces TRANSFER msg.
         </FluentHeader>
-        <FluentTextArea Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
+        <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
                         Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
