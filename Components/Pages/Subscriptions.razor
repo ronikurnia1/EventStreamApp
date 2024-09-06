@@ -20,13 +20,16 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
-    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
-</FluentDataGrid>
+@if (btnLblSubsTrf == "Unsubscribe")
+{
+    <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
+        <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+        <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+        <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
+}
 
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
     Topic: CUSTOMER
@@ -36,14 +39,16 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
-    <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
-    <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
-    <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
-</FluentDataGrid>
-
+@if (btnLblSubsCst == "Unsubscribe")
+{
+    <FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
+        <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+        <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+        <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
+    </FluentDataGrid>
+}
 
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
     Topic: TRANSFER >= 1m
@@ -53,13 +58,16 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
-    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
-</FluentDataGrid>
+@if (btnLblSubsTrf1m == "Unsubscribe")
+{
+    <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
+        <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+        <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+        <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+        <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
+}
 
 <FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
     Topic: CUSTOMER.TRANSFER >= 10m
@@ -69,14 +77,16 @@
         <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
-<FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
-    <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
-    <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
-    <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
-    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
-</FluentDataGrid>
-
+@if (btnLblSubsCstTrf == "Unsubscribe")
+{
+    <FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
+        <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+        <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+        <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
+    </FluentDataGrid>
+}
 @code {
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
@@ -138,6 +148,7 @@
     {
         customers = new List<Customer>().AsQueryable();
     }
+
 
     private void SubscribeTrf()
     {
@@ -223,8 +234,6 @@
             btnLblSubsCst = "Subscribe";
         }
     }
-
-
 
 
     private void GetTransfer(string trData)
