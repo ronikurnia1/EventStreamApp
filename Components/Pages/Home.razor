@@ -28,7 +28,7 @@
     Architecture diagram
 </FluentLabel>
 
-<img style="padding-top:2em" src="EventAutomationDemoApp.png" width="700" />
+<img style="padding-top:2em; max-width:100%; max-height:100%" src="EventAutomationDemoApp.png" />
 <p>
     <b>Note:</b><br />
     This demo takes message from IBM MQ as a source (which is originally produced by core system), clone and forward it to IBM Event Automation (Event Streams, Event Endpoint Management and Event Processing) for further processing. 
@@ -38,7 +38,7 @@
     Event Processing Flow
 </FluentLabel>
 
-<img style="padding-top:1em; padding-bottom:1em" src="EventFlow.png" width="700" />
+<img style="padding-top:1em; padding-bottom:1em; max-width:100%; max-height:100%" src="EventFlow.png" />
 <p>
     <b>Note:</b><br />
     Two different events (Transfer and Customers) that might come from different systems get processed by IBM Event Processing: filtering and combining in real-time within certain time window. If the condition meets the requirements then it generates a new event (e.g. Customer.Transfer) as a business insight to trigger other system.
