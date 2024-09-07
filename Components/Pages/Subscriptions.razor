@@ -11,12 +11,12 @@
     <FluentLabel Typo="Typography.H3">Event Subscriptions</FluentLabel>
 </FluentStack>
 
-<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder">
-    <FluentLabel Color="Color.Neutral" Typo="Typography.Body">Topic: TRANSFER</FluentLabel>
+<FluentHeader>
+    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: TRANSFER</FluentLabel>
     <FluentSpacer />
     <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf">@btnLblSubsTrf</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
+        <FluentButton IconStart="@(btnLblSubsTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf">@btnLblSubsTrf</FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 @if (btnLblSubsTrf == "Unsubscribe")
@@ -30,12 +30,12 @@
     </FluentDataGrid>
 }
 
-<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
-    <FluentLabel Color="Color.Neutral" Typo="Typography.Body">Topic: CUSTOMER</FluentLabel>
+<FluentHeader Style="margin-top:3em">
+    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: CUSTOMER</FluentLabel>
     <FluentSpacer />
     <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsCst.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCst">@btnLblSubsCst</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
+        <FluentButton IconStart="@(btnLblSubsCst.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCst">@btnLblSubsCst</FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 @if (btnLblSubsCst == "Unsubscribe")
@@ -49,12 +49,12 @@
     </FluentDataGrid>
 }
 
-<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
-    <FluentLabel Color="Color.Neutral" Typo="Typography.Body">Topic: TRANSFER >= 1m</FluentLabel>
+<FluentHeader Style="margin-top:3em">
+    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: TRANSFER >= 1m</FluentLabel>
     <FluentSpacer />
     <FluentToolbar Style="background-color: transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsTrf1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf1m">@btnLblSubsTrf1m</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
+        <FluentButton IconStart="@(btnLblSubsTrf1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf1m">@btnLblSubsTrf1m</FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 @if (btnLblSubsTrf1m == "Unsubscribe")
@@ -68,12 +68,12 @@
     </FluentDataGrid>
 }
 
-<FluentHeader Style="background-color:ButtonFace;color:ActiveBorder;margin-top:3em">
-    <FluentLabel Color="Color.Neutral" Typo="Typography.Body">Topic: CUSTOMER.TRANSFER >= 10m</FluentLabel>    
+<FluentHeader Style="margin-top:3em">
+    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: CUSTOMER.TRANSFER >= 10m</FluentLabel>    
     <FluentSpacer />
     <FluentToolbar Style="background-color: transparent">
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(btnLblSubsCstTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCstTrf">@btnLblSubsCstTrf</FluentButton>
-        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
+        <FluentButton IconStart="@(btnLblSubsCstTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCstTrf">@btnLblSubsCstTrf</FluentButton>
+        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
     </FluentToolbar>
 </FluentHeader>
 @if (btnLblSubsCstTrf == "Unsubscribe")
@@ -113,8 +113,8 @@ else
     private IKafkaSubscription cstSubs { get; set; } = default!;
 
 
-    private Icon subscribeIcon = new Icons.Regular.Size24.Flash();
-    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff();
+    private Icon subscribeIcon = new Icons.Regular.Size24.Flash().WithColor(Color.Accent);
+    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff().WithColor(Color.Accent);
 
     protected override async Task OnInitializedAsync()
     {
