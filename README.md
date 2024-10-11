@@ -30,7 +30,7 @@ Two different events (Transfer and Customers) that might come from different sys
    - Setup IBM Entitlement Key
    - Clone this repo: https://github.com/ronikurnia1/EventStreamApp
    - In CP4I terminal run './deploy.sh'
-4. On OpenShift cluster, create application unsing this GitHub repo: https://github.com/ronikurnia1/EventStreamApp 
+4. On OpenShift cluster, create application using this GitHub repo: https://github.com/ronikurnia1/EventStreamApp 
 
 
 ## How to use the DemoApp
