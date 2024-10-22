@@ -39,7 +39,7 @@ spec:
           volumeMounts:
           - name: config-volume
             mountPath: /app/config
-        volumes:
+      volumes:
         - name: config-volume
           configMap:
             name: es-demo-app

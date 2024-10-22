@@ -3,6 +3,8 @@
 
 @rendermode InteractiveServer
 @implements IAsyncDisposable
+@inject IToastService ToasService
+
 
 <PageTitle>DemoApp</PageTitle>
 
@@ -90,6 +92,7 @@ else
 {
     <div style="padding-bottom:3em"></div>
 }
+
 @code {
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
@@ -231,9 +234,12 @@ else
 
     private void GetCustomerTransfer(string trData)
     {
+        var csTrf = JsonSerializer.Deserialize<CustomerTransfer>(trData, options);
+        var message = $"Transfer {csTrf!.Amount} from {csTrf.Name}";
+        Notify(message);
+
         this.InvokeAsync(() =>
         {
-            var csTrf = JsonSerializer.Deserialize<CustomerTransfer>(trData, options);
             if (csTrf != null)
             {
                 var existing = customerTransfer.ToList<CustomerTransfer>();
@@ -243,6 +249,15 @@ else
             }
         });
     }
+
+
+    private void Notify(string infoMessage) {
+        this.InvokeAsync(() =>
+        {
+            ToasService.ShowSuccess(infoMessage);
+        });
+    }
+
 
     private void GetTransfer1m(string trData)
     {
