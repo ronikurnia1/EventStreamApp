@@ -24,15 +24,15 @@
             </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
-                        Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
+        Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
-                          Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
+            Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
             <FluentSpacer />
             <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
-                          Disabled="@(customerMessage.Length == 0 || !isCstMessageValid)"
-                          Appearance="Appearance.Accent" @onclick="@(()=>SendMessageToMQ("CUSTOMER", customerMessage))">Send message</FluentButton>
+            Disabled="@(customerMessage.Length == 0 || !isCstMessageValid)"
+            Appearance="Appearance.Accent" @onclick="@(()=>SendMessageToMQ("CUSTOMER", customerMessage))">Send message</FluentButton>
         </FluentStack>
     </div>
 
@@ -46,15 +46,15 @@
             </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
-                        Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
+        Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
-                          Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
+            Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
             <FluentSpacer />
             <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
-                          Disabled="@(transferMessage.Length == 0 || !isTrfMessageValid)"
-                          Appearance="Appearance.Accent" @onclick="@(() => SendMessageToMQ("TRANSFER", transferMessage))">Send message</FluentButton>
+            Disabled="@(transferMessage.Length == 0 || !isTrfMessageValid)"
+            Appearance="Appearance.Accent" @onclick="@(() => SendMessageToMQ("TRANSFER", transferMessage))">Send message</FluentButton>
         </FluentStack>
     </div>
 </FluentStack>
@@ -153,8 +153,11 @@
             MQQueue queue = qManager.AccessQueue(queueName, openOptions);
             MQMessage msg = new MQMessage();
             msg.CharacterSet = MQC.CODESET_UTF;
-            msg.WriteString(messageToSend);
+            msg.WriteUTF(messageToSend);
+            //msg.WriteString(messageToSend);
+
             MQPutMessageOptions pmo = new MQPutMessageOptions();
+            
             queue.Put(msg, pmo);
             if (queueName == "CUSTOMER")
             {
