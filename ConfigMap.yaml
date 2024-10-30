@@ -26,7 +26,7 @@ data:
           "UserName": "eem-0f073731-e1f9-4321-b7ee-149dcf7930fc",
           "Password": "65539d4c-6696-43b0-bf9e-4a73730a014f"
         },
-        "TRANSFER-1M-OR-MORE": {
+        "LARGE.TRANSFER": {
           "username": "eem-9b678d95-86c1-4fa6-88c8-1e00b7eba892",
           "password": "723a7dad-e6dd-48d2-860c-39efcebe2feb"
         },
