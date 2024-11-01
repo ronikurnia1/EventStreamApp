@@ -98,7 +98,7 @@ data:
       },
       "AllowedHosts": "*",
       "EventStreams": {
-        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.66e994bc5b4a974d662ba7df.ocp.techzone.ibm.com:443",
+        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.672077fc8376796fb96a6817.ocp.techzone.ibm.com:443",
         "TRANSFER": {
           "UserName": "eem-94d52be8-e20f-49cd-a1fb-ef9863b82bbe",
           "Password": "72272bc1-739c-4a89-a867-d3417ac6d3f5"

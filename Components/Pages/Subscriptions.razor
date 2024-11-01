@@ -13,85 +13,86 @@
     <FluentLabel Typo="Typography.H3">Event Subscriptions</FluentLabel>
 </FluentStack>
 
-<FluentHeader>
-    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: TRANSFER</FluentLabel>
-    <FluentSpacer />
-    <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-        <FluentButton IconStart="@(btnLblSubsTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf">@btnLblSubsTrf</FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
-    </FluentToolbar>
-</FluentHeader>
-@if (btnLblSubsTrf == "Unsubscribe")
-{
-    <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
-        <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-        <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-        <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-}
+<FluentAccordion Style="padding-bottom:2em">
+    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" Heading="Topic: TRANSFER" @bind-Expanded="expSubsTrf">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Mail())" Color="@Color.Accent" Slot="start" />
+        <div slot="end">
+            <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                <FluentButton Appearance="Appearance.Accent" StopPropagation="true" IconStart="@(subsTrf ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeTrf">@(subsTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" StopPropagation="true" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
+            </FluentToolbar>
+        </div>
 
-<FluentHeader Style="margin-top:3em">
-    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: CUSTOMER</FluentLabel>
-    <FluentSpacer />
-    <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-        <FluentButton IconStart="@(btnLblSubsCst.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCst">@btnLblSubsCst</FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
-    </FluentToolbar>
-</FluentHeader>
-@if (btnLblSubsCst == "Unsubscribe")
-{
-    <FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
-        <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
-        <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
-        <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
-    </FluentDataGrid>
-}
+        @if (subsTrf)
+        {
+            <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
+                <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+                <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+                <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+                <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+            </FluentDataGrid>
+        }
 
-<FluentHeader Style="margin-top:3em">
-    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: LARGE.TRANSFER</FluentLabel>
-    <FluentSpacer />
-    <FluentToolbar Style="background-color: transparent">
-        <FluentButton IconStart="@(btnLblSubsTrf1m.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeTrf1m">@btnLblSubsTrf1m</FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
-    </FluentToolbar>
-</FluentHeader>
-@if (btnLblSubsTrf1m == "Unsubscribe")
-{
-    <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
-        <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-        <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-        <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
-        <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-}
-
-<FluentHeader Style="margin-top:3em">
-    <FluentLabel Color="Color.Lightweight" Typo="Typography.Body">Topic: CUSTOMER.TRANSFER</FluentLabel>    
-    <FluentSpacer />
-    <FluentToolbar Style="background-color: transparent">
-        <FluentButton IconStart="@(btnLblSubsCstTrf.Length <= 9 ? subscribeIcon: unsubscribeIcon)" OnClick="SubscribeCstTrf">@btnLblSubsCstTrf</FluentButton>
-        <FluentButton IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
-    </FluentToolbar>
-</FluentHeader>
-@if (btnLblSubsCstTrf == "Unsubscribe")
-{
-    <FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
-        <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
-        <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
-        <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
-        <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
-    </FluentDataGrid>
-}
-else
-{
-    <div style="padding-bottom:3em"></div>
-}
+    </FluentAccordionItem>
+    <FluentAccordionItem Heading="Topic: CUSTOMER" @bind-Expanded="expSubsCst">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Mail())" Color="@Color.Accent" Slot="start" />
+        <div slot="end">
+            <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(subsCst ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeCst">@(subsCst ? "Unsubscribe" : "Subscribe")</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
+            </FluentToolbar>
+        </div>
+        @if (subsCst)
+        {
+            <FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
+                <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+                <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+                <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
+            </FluentDataGrid>
+        }
+    </FluentAccordionItem>
+    <FluentAccordionItem Heading="Topic: LARGE.TRANSFER" @bind-Expanded="expSubsTrf1m">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Mail())" Color="@Color.Accent" Slot="start" />
+        <div slot="end">
+            <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(subsTrf1m ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeTrf1m">@(subsTrf1m ? "Unsubscribe" : "Subscribe")</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf1m">Clear</FluentButton>
+            </FluentToolbar>
+        </div>
+        @if (subsTrf1m)
+        {
+            <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
+                <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+                <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
+                <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+                <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+            </FluentDataGrid>
+        }
+    </FluentAccordionItem>
+    <FluentAccordionItem Heading="Topic: CUSTOMER.TRANSFER" @bind-Expanded="expSubsCstTrf">
+        <FluentIcon Value="@(new Icons.Regular.Size24.Mail())" Color="@Color.Accent" Slot="start" />
+        <div slot="end">
+            <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(subsCstTrf ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeCstTrf">@(subsCstTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
+                <FluentButton Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
+            </FluentToolbar>
+        </div>
+        @if (subsCstTrf)
+        {
+            <FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
+                <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+                <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+                <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+                <PropertyColumn Width="20%" Property="@(t => t.Amount)" Title="Transfer amount" Align="Align.End" Format="N0" Sortable="true" />
+            </FluentDataGrid>
+        }
+    </FluentAccordionItem>
+</FluentAccordion>
 
 @code {
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
@@ -101,10 +102,15 @@ else
     private IQueryable<CustomerTransfer> customerTransfer = new List<CustomerTransfer>().AsQueryable();
     private IQueryable<Customer> customers = new List<Customer>().AsQueryable();
 
-    private string btnLblSubsTrf = "Subscribe";
-    private string btnLblSubsTrf1m = "Subscribe";
-    private string btnLblSubsCst = "Subscribe";
-    private string btnLblSubsCstTrf = "Subscribe";
+    private bool subsTrf = false;
+    private bool subsTrf1m = false;
+    private bool subsCst = false;
+    private bool subsCstTrf = false;
+
+    private bool expSubsTrf = false;
+    private bool expSubsTrf1m = false;
+    private bool expSubsCst = false;
+    private bool expSubsCstTrf = false;
 
     [Inject]
     private IKafkaSubscription trfSubs { get; set; } = default!;
@@ -116,8 +122,10 @@ else
     private IKafkaSubscription cstSubs { get; set; } = default!;
 
 
-    private Icon subscribeIcon = new Icons.Regular.Size24.Flash().WithColor(Color.Accent);
-    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff().WithColor(Color.Accent);
+    private bool accordion1Open = false;
+
+    private Icon subscribeIcon = new Icons.Regular.Size24.Flash().WithColor(Color.Lightweight);
+    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff().WithColor(Color.Lightweight);
 
     protected override async Task OnInitializedAsync()
     {
@@ -147,58 +155,58 @@ else
 
     private void SubscribeTrf()
     {
-        if (btnLblSubsTrf == "Subscribe")
+        if (subsTrf)
         {
-            trfSubs.Run(GetTransfer, "TRANSFER");
-            btnLblSubsTrf = "Unsubscribe";
+            trfSubs.Stop();
         }
         else
         {
-            trfSubs.Stop();
-            btnLblSubsTrf = "Subscribe";
+            trfSubs.Run(GetTransfer, "TRANSFER");
+            expSubsTrf = true;
         }
+        subsTrf = !subsTrf;
     }
 
     private void SubscribeCstTrf()
     {
-        if (btnLblSubsCstTrf == "Subscribe")
+        if (subsCstTrf)
         {
-            cstTrfSubs.Run(GetCustomerTransfer, "CUSTOMER.TRANSFER");
-            btnLblSubsCstTrf = "Unsubscribe";
+            cstTrfSubs?.Stop();
         }
         else
         {
-            cstTrfSubs?.Stop();
-            btnLblSubsCstTrf = "Subscribe";
+            cstTrfSubs.Run(GetCustomerTransfer, "CUSTOMER.TRANSFER");
+            expSubsCstTrf = true;
         }
+        subsCstTrf = !subsCstTrf;
     }
 
     private void SubscribeTrf1m()
     {
-        if (btnLblSubsTrf1m == "Subscribe")
+        if (subsTrf1m)
         {
-            trf1mSubs.Run(GetTransfer1m, "LARGE.TRANSFER");
-            btnLblSubsTrf1m = "Unsubscribe";
+            trf1mSubs?.Stop();
         }
         else
         {
-            trf1mSubs?.Stop();
-            btnLblSubsTrf1m = "Subscribe";
+            trf1mSubs.Run(GetTransfer1m, "LARGE.TRANSFER");
+            expSubsTrf1m = true;
         }
+        subsTrf1m = !subsTrf1m;
     }
 
     private void SubscribeCst()
     {
-        if (btnLblSubsCst == "Subscribe")
+        if (subsCst)
         {
-            cstSubs.Run(GetCustomer, "CUSTOMERS");
-            btnLblSubsCst = "Unsubscribe";
+            cstSubs?.Stop();
         }
         else
         {
-            cstSubs?.Stop();
-            btnLblSubsCst = "Subscribe";
+            cstSubs.Run(GetCustomer, "CUSTOMERS");
+            expSubsCst = true;
         }
+        subsCst = !subsCst;
     }
 
 
@@ -251,7 +259,8 @@ else
     }
 
 
-    private void Notify(string infoMessage) {
+    private void Notify(string infoMessage)
+    {
         this.InvokeAsync(() =>
         {
             ToasService.ShowSuccess(infoMessage);
