@@ -32,8 +32,8 @@
             {
                 <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
                     <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+                    <PropertyColumn Width="25%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
+                    <PropertyColumn Width="25%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
                     <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
                     <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
                 </FluentDataGrid>
@@ -84,8 +84,8 @@
             {
                 <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
                     <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.Source)" Title="From account" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.Target)" Title="To account" Sortable="true" />
+                    <PropertyColumn Width="25%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
+                    <PropertyColumn Width="25%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
                     <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
                     <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
                 </FluentDataGrid>

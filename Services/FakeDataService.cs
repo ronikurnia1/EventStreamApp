@@ -20,8 +20,8 @@ public class FakeDataService : IFakeDataService
         var fakeTransfer = new Faker<Transfer>("id_ID")
             .StrictMode(true)
             .RuleFor(t => t.Id, f => $"TRF-{f.Finance.Account(4)}")
-            .RuleFor(t => t.Source, f => $"{f.Finance.Account(8)}")
-            .RuleFor(t => t.Target, f => $"{f.Finance.Account(8)}")
+            .RuleFor(t => t.FromAccount, f => $"{f.Finance.Account(8)}")
+            .RuleFor(t => t.ToAccount, f => $"{f.Finance.Account(8)}")
             .RuleFor(t => t.Amount, f => f.Random.Number(50000, 20000001))
             .RuleFor(t => t.BookedDate, f => DateOnly.FromDateTime(f.Date.Between(DateTime.Today.AddDays(-30), DateTime.Today)))
             .RuleFor(t => t.Type, f => f.PickRandom(transferTypes));
