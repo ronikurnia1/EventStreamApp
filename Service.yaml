@@ -1,0 +1,33 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: es-demo-app
+  namespace: app-space
+  labels:
+    app: es-demo-app
+    app.kubernetes.io/component: es-demo-app
+    app.kubernetes.io/instance: es-demo-app
+    app.kubernetes.io/name: es-demo-app
+    app.kubernetes.io/part-of: es-demo-app
+  annotations:
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:
+  clusterIP: 172.30.2.77
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  clusterIPs:
+    - 172.30.2.77
+  type: ClusterIP
+  ipFamilyPolicy: SingleStack
+  sessionAffinity: None
+  selector:
+    app: es-demo-app
+    deployment: es-demo-app

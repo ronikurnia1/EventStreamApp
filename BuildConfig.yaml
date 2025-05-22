@@ -1,0 +1,47 @@
+﻿kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: ''
+    app.openshift.io/vcs-uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: es-demo-app
+  namespace: app-space
+  labels:
+    app: es-demo-app
+    app.kubernetes.io/component: es-demo-app
+    app.kubernetes.io/instance: es-demo-app
+    app.kubernetes.io/name: es-demo-app
+    app.kubernetes.io/part-of: es-demo-app
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'es-demo-app:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Dockerfile
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/ronikurnia1/EventStreamApp'
+    contextDir: /
+  triggers:
+    - type: Generic
+      generic:
+        secretReference:
+          name: es-demo-app-generic-webhook-secret
+    - type: GitHub
+      github:
+        secretReference:
+          name: es-demo-app-github-webhook-secret
+    - type: ConfigChange
+  runPolicy: Serial
+status:
+  lastVersion: 8

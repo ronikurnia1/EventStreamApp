@@ -1,0 +1,125 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: es-demo-app
+data:
+  cert-eem.pem: |-
+    -----BEGIN CERTIFICATE-----
+    MIILODCCCiCgAwIBAgIRAKTcVVFqIrdmBgki1UtKsVwwDQYJKoZIhvcNAQELBQAw
+    UDEmMCQGA1UEChMdSUJNIEV2ZW50IEVuZHBvaW50IE1hbmFnZW1lbnQxJjAkBgNV
+    BAMTHUlCTSBFdmVudCBFbmRwb2ludCBNYW5hZ2VtZW50MB4XDTI0MTAyOTA5MjUy
+    NVoXDTI1MDEyNzA5MjUyNVowKDEmMCQGA1UEChMdSUJNIEV2ZW50IEVuZHBvaW50
+    IE1hbmFnZW1lbnQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDt/XT0
+    r+T/YId2QIARIxx/aF1DfIf8jdPNTGDEur4hPO6Q++W05VSqxQNSb7m74fqtxg9P
+    ZcdfdAwmMl+RA+Iu/cE0HaTP8IOgy0VYvvBjcXCz8MPQxodLIxlkvUqlI1HVEsyz
+    Ejt+Mi4eqwYFG+QL7TtotJ8hNVuAqj60SGfEg8LxjXsazUQjWa0kh1e4f0aNqcbV
+    oOvErKHNkX7Gjq2ApbZJYKYydoYM6BHbxhcndeMPYYruRKZyD4FqkFfd0S7HRL63
+    Mp4vVWWeKBG9mSac+NLVVANm0G4mukI+7Hh6K4388thRuOcI2tkjKRghIlM6Jreo
+    nXVkg44/KH+uf5OLAgMBAAGjgggzMIIILzAOBgNVHQ8BAf8EBAMCB4AwHQYDVR0l
+    BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgw
+    FoAUGWuxYq5nFbtHiQrMIDxzDtXqQsYwggfNBgNVHREEggfEMIIHwIIiZW50LWV2
+    ZW50LWd3LWlibS1lZ3ctc3ZjLmFwcC1zcGFjZYImZW50LWV2ZW50LWd3LWlibS1l
+    Z3ctc3ZjLmFwcC1zcGFjZS5zdmOCNGVudC1ldmVudC1ndy1pYm0tZWd3LXN2Yy5h
+    cHAtc3BhY2Uuc3ZjLmNsdXN0ZXIubG9jYWyCVGVudC1ldmVudC1ndy1pYm0tZWd3
+    LXJ0LWFwcC1zcGFjZS5hcHBzLjY3MjA3N2ZjODM3Njc5NmZiOTZhNjgxNy5vY3Au
+    dGVjaHpvbmUuaWJtLmNvbYJXZW50LWV2ZW50LWd3LWlibS1lZ3ctcnQtMTQtYXBw
+    LXNwYWNlLmFwcHMuNjcyMDc3ZmM4Mzc2Nzk2ZmI5NmE2ODE3Lm9jcC50ZWNoem9u
+    ZS5pYm0uY29tglZlbnQtZXZlbnQtZ3ctaWJtLWVndy1ydC05LWFwcC1zcGFjZS5h
+    cHBzLjY3MjA3N2ZjODM3Njc5NmZiOTZhNjgxNy5vY3AudGVjaHpvbmUuaWJtLmNv
+    bYJWZW50LWV2ZW50LWd3LWlibS1lZ3ctcnQtOC1hcHAtc3BhY2UuYXBwcy42NzIw
+    NzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6b25lLmlibS5jb22CVmVudC1l
+    dmVudC1ndy1pYm0tZWd3LXJ0LTUtYXBwLXNwYWNlLmFwcHMuNjcyMDc3ZmM4Mzc2
+    Nzk2ZmI5NmE2ODE3Lm9jcC50ZWNoem9uZS5pYm0uY29tgldlbnQtZXZlbnQtZ3ct
+    aWJtLWVndy1ydC0xNS1hcHAtc3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2
+    YTY4MTcub2NwLnRlY2h6b25lLmlibS5jb22CV2VudC1ldmVudC1ndy1pYm0tZWd3
+    LXJ0LTE2LWFwcC1zcGFjZS5hcHBzLjY3MjA3N2ZjODM3Njc5NmZiOTZhNjgxNy5v
+    Y3AudGVjaHpvbmUuaWJtLmNvbYJWZW50LWV2ZW50LWd3LWlibS1lZ3ctcnQtMi1h
+    cHAtc3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6
+    b25lLmlibS5jb22CVmVudC1ldmVudC1ndy1pYm0tZWd3LXJ0LTEtYXBwLXNwYWNl
+    LmFwcHMuNjcyMDc3ZmM4Mzc2Nzk2ZmI5NmE2ODE3Lm9jcC50ZWNoem9uZS5pYm0u
+    Y29tglRlbnQtZXZlbnQtZ3ctaWJtLWVndy1ydC1hcHAtc3BhY2UuYXBwcy42NzIw
+    NzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6b25lLmlibS5jb22CV2VudC1l
+    dmVudC1ndy1pYm0tZWd3LXJ0LTEyLWFwcC1zcGFjZS5hcHBzLjY3MjA3N2ZjODM3
+    Njc5NmZiOTZhNjgxNy5vY3AudGVjaHpvbmUuaWJtLmNvbYJWZW50LWV2ZW50LWd3
+    LWlibS1lZ3ctcnQtNC1hcHAtc3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2
+    YTY4MTcub2NwLnRlY2h6b25lLmlibS5jb22CVmVudC1ldmVudC1ndy1pYm0tZWd3
+    LXJ0LTYtYXBwLXNwYWNlLmFwcHMuNjcyMDc3ZmM4Mzc2Nzk2ZmI5NmE2ODE3Lm9j
+    cC50ZWNoem9uZS5pYm0uY29tgldlbnQtZXZlbnQtZ3ctaWJtLWVndy1ydC0xOS1h
+    cHAtc3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6
+    b25lLmlibS5jb22CV2VudC1ldmVudC1ndy1pYm0tZWd3LXJ0LTE3LWFwcC1zcGFj
+    ZS5hcHBzLjY3MjA3N2ZjODM3Njc5NmZiOTZhNjgxNy5vY3AudGVjaHpvbmUuaWJt
+    LmNvbYJWZW50LWV2ZW50LWd3LWlibS1lZ3ctcnQtMy1hcHAtc3BhY2UuYXBwcy42
+    NzIwNzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6b25lLmlibS5jb22CV2Vu
+    dC1ldmVudC1ndy1pYm0tZWd3LXJ0LTEwLWFwcC1zcGFjZS5hcHBzLjY3MjA3N2Zj
+    ODM3Njc5NmZiOTZhNjgxNy5vY3AudGVjaHpvbmUuaWJtLmNvbYJXZW50LWV2ZW50
+    LWd3LWlibS1lZ3ctcnQtMTEtYXBwLXNwYWNlLmFwcHMuNjcyMDc3ZmM4Mzc2Nzk2
+    ZmI5NmE2ODE3Lm9jcC50ZWNoem9uZS5pYm0uY29tgldlbnQtZXZlbnQtZ3ctaWJt
+    LWVndy1ydC0xOC1hcHAtc3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2YTY4
+    MTcub2NwLnRlY2h6b25lLmlibS5jb22CVmVudC1ldmVudC1ndy1pYm0tZWd3LXJ0
+    LTctYXBwLXNwYWNlLmFwcHMuNjcyMDc3ZmM4Mzc2Nzk2ZmI5NmE2ODE3Lm9jcC50
+    ZWNoem9uZS5pYm0uY29tgldlbnQtZXZlbnQtZ3ctaWJtLWVndy1ydC0xMy1hcHAt
+    c3BhY2UuYXBwcy42NzIwNzdmYzgzNzY3OTZmYjk2YTY4MTcub2NwLnRlY2h6b25l
+    LmlibS5jb20wDQYJKoZIhvcNAQELBQADggEBAJFzaqh+MdRI4OvDjM7v2iw9xGG/
+    /CagGEprXX/saCrnhJimUoaMAvuf9um03vvCJkiNuf1F8oqhNvZXeOm0mgV4tOvS
+    iE2df7w000LiX/n4d9DxiRXvOV6yJ8AZHxwWvaBSE52VY65M+2S/Zb8Q5MlAnehx
+    LWed1eU6YVB0U6t7E5Zq1r7dhEFazyAGLn0WukPuG1tvUrILDPBse1T9O5NC1ksr
+    m2dlbYuTvkh8WyKFXJ7ghBlggLQoCyeyDtTkVzm8wmlu9D/XT0Pe1mVopWxvMkkj
+    yhEeXgY6TU/WFnfkKKrXhXdLMEKLgtETsqeQJEGnuStKdroOP0zGaU7nf8g=
+    -----END CERTIFICATE-----
+
+    -----BEGIN CERTIFICATE-----
+    MIIDbTCCAlWgAwIBAgIRAPZN2WVr8cvMBHI1kSzMPT4wDQYJKoZIhvcNAQELBQAw
+    UDEmMCQGA1UEChMdSUJNIEV2ZW50IEVuZHBvaW50IE1hbmFnZW1lbnQxJjAkBgNV
+    BAMTHUlCTSBFdmVudCBFbmRwb2ludCBNYW5hZ2VtZW50MB4XDTI0MTAyOTA5MjMy
+    M1oXDTI1MTAyOTA5MjMyM1owUDEmMCQGA1UEChMdSUJNIEV2ZW50IEVuZHBvaW50
+    IE1hbmFnZW1lbnQxJjAkBgNVBAMTHUlCTSBFdmVudCBFbmRwb2ludCBNYW5hZ2Vt
+    ZW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArWSkTj6bDiJS2DiU
+    QPSeWyMv4GM2kxdo8jNMBz/IlgMsIIcdR8KOdozI2LIWEM+9seHTYqn0+Se2bkTR
+    FtgnNI6MySVZPzS7TWvm85+f3E3yHYzq5Q4BivGlQHocMeSwfDe4wAm8pJ+p8VUQ
+    rxr5kaFd5J0N7779sKSanVxeJwf0HIwZA/+hMrCnsCq5sfBJ40ZrKz5uFSIwwfTz
+    ifXAAWhs5m96fPhc1i6hgT2mjKqyhvTQrPeMo4A68I2Wab7acLZid3mtWd+FIoma
+    xW0lnwSQJGaSrGdTiAca1QbpKkUvT/PS4VP5UFDbdgelTlQRwO4Ntgx7VZwxrtiV
+    I6d6zwIDAQABo0IwQDAOBgNVHQ8BAf8EBAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAd
+    BgNVHQ4EFgQUGWuxYq5nFbtHiQrMIDxzDtXqQsYwDQYJKoZIhvcNAQELBQADggEB
+    AFEU0KpzzpSnM8rlaW7R805CkbEM8vPQgebnKIT6zpzvrC346lKo8OoUoqKEAjg9
+    oy0Q7piWewpMjL7izGx5udqaT6MVoeCMUq7opMBT5wV6j8CdIongg9Yr8wxUtmYn
+    eMRCFTFmbI7SJh75bgwvPaOC23tZRh0u7qAJpEU+lPfiOOFgW5Ei8UzgMud+US/n
+    APy3iB/JQlKhXqxENsJFC9o8L92GvAT0TglnovXsCR/URxsrnzdIa9RWHmcXeSzq
+    D8Q5mw8xw9yiFQ0W4SNmQ9MP4XtUXEJQi7Xa0ujd5Zt1fyCm6bjLuQHtwLOWYOLT
+    6tyXK0Vj9iZX6R9jrHXrYO0=
+    -----END CERTIFICATE-----
+  appsettings.json: |-
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "AllowedHosts": "*",
+      "EventStreams": {
+        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.672077fc8376796fb96a6817.ocp.techzone.ibm.com:443",
+        "TRANSFER": {
+          "UserName": "eem-94d52be8-e20f-49cd-a1fb-ef9863b82bbe",
+          "Password": "72272bc1-739c-4a89-a867-d3417ac6d3f5"
+        },
+        "LARGE.TRANSFER": {
+          "username": "eem-88dd3dab-e9d8-4ae5-a2f1-8f93051d54b6",
+          "password": "c96fc321-f371-4e1d-b420-c0f9ec5bcf5d"
+        },
+        "CUSTOMERS": {
+          "username": "eem-fd82afae-0836-496e-b32d-76646de0f74a",
+          "password": "b0421b76-90a1-4446-aafc-cc1353721024"
+        },
+        "CUSTOMER.TRANSFER": {
+          "username": "eem-48b45f8c-bd70-46b4-8218-c8559dc53bc8",
+          "password": "21606a39-64c1-4366-847d-3a3c46fe7035"
+        }
+      },
+      "IbmMq": {
+        "Hostname": "msgmq-ibm-mq",
+        "Channel": "APP.CHANNEL",
+        "QueueManager": "msgmq",
+        "Port": 1414
+      }
+    }
