@@ -1,6 +1,7 @@
 ﻿@page "/message"
 @using EventStreamApp.Models
 @using IBM.WMQ
+@using System.Text
 
 @rendermode InteractiveServer
 
@@ -153,8 +154,9 @@
             MQQueue queue = qManager.AccessQueue(queueName, openOptions);
             MQMessage msg = new MQMessage();
             msg.CharacterSet = MQC.CODESET_UTF;
-            msg.WriteUTF(messageToSend);
-            //msg.WriteString(messageToSend);
+            byte[] utf8Bytes = Encoding.UTF8.GetBytes(messageToSend);
+            string utf8String = Encoding.UTF8.GetString(utf8Bytes);
+            msg.WriteString(utf8String);
             
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             
