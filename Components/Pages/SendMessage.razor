@@ -153,8 +153,8 @@
             MQQueue queue = qManager.AccessQueue(queueName, openOptions);
             MQMessage msg = new MQMessage();
             msg.CharacterSet = MQC.CODESET_UTF;
-            //msg.WriteUTF(messageToSend);
-            msg.WriteString(messageToSend);
+            msg.WriteUTF(messageToSend);
+            //msg.WriteString(messageToSend);
             
             MQPutMessageOptions pmo = new MQPutMessageOptions();
             
