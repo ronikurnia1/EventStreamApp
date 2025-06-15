@@ -160,7 +160,6 @@
             msg.CharacterSet = MQC.CODESET_UTF;
             msg.Format = MQC.MQFMT_STRING;
             msg.WriteString(messageToSend);
-            //msg.WriteUTF(messageToSend);
 
             MQPutMessageOptions pmo = new MQPutMessageOptions();          
             queue.Put(msg, pmo);
