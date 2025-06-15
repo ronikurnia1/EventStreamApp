@@ -158,7 +158,7 @@
             MQMessage msg = new MQMessage();
             msg.PutApplicationType = MQC.MQAT_WINDOWS;
             msg.CharacterSet = MQC.CODESET_UTF;
-
+            msg.Format = MQC.MQFMT_STRING;
             msg.WriteString(messageToSend);
             //msg.WriteUTF(messageToSend);
 
