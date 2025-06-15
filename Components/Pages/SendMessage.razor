@@ -156,18 +156,13 @@
             MQQueue queue = qManager.AccessQueue(queueName, openOptions);
 
             MQMessage msg = new MQMessage();
-            //msg.Encoding = 
-            //msg.Set
-
-            msg.CharacterSet = MQC.MQCCSI_Q_MGR;
-            //msg.CharacterSet = MQC.CODESET_UTF;
+            msg.PutApplicationType = MQC.MQAT_WINDOWS;
+            msg.CharacterSet = MQC.CODESET_UTF;
 
             msg.WriteString(messageToSend);
             //msg.WriteUTF(messageToSend);
 
-            MQPutMessageOptions pmo = new MQPutMessageOptions();
-            
-
+            MQPutMessageOptions pmo = new MQPutMessageOptions();          
             queue.Put(msg, pmo);
             if (queueName == "CUSTOMER")
             {
