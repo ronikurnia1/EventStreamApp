@@ -21,7 +21,7 @@ public class Customer
 }
 
 
-public class CustomerTransfer
+public class SalesPromotion
 {
     public string Id { get; set; } = string.Empty;
     public string RegisteredDate { get; set; } = string.Empty;

@@ -121,23 +121,23 @@
             }
         </ChildContent>
     </FluentAccordionItem>
-    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsCstTrf">
+    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsSalesPromo">
         <HeadingTemplate>
             <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
                 <FluentIcon Value="@(new Icons.Regular.Size24.Mail())" Color="@Color.Lightweight" Slot="start" />
-                <FluentLabel Color="Color.Lightweight">Topic: CUSTOMER.TRANSFER</FluentLabel>
+                <FluentLabel Color="Color.Lightweight">Topic: SALES.PROMOTION</FluentLabel>
             </FluentStack>
         </HeadingTemplate>
         <ChildContent>
             <div slot="end">
                 <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(subsCstTrf ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeCstTrf">@(subsCstTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
-                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCstTrf">Clear</FluentButton>
+                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(subsSalesPromo? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeSalesPromo">@(subsSalesPromo ? "Unsubscribe" : "Subscribe")</FluentButton>
+                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearSalesPromotion">Clear</FluentButton>
                 </FluentToolbar>
             </div>
-            @if (subsCstTrf)
+            @if (subsSalesPromo)
             {
-                <FluentDataGrid Style="padding-bottom:3em" Items="customerTransfer" ShowHover="true" ResizableColumns="true">
+                <FluentDataGrid Style="padding-bottom:3em" Items="salesPromotions" ShowHover="true" ResizableColumns="true">
                     <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
                     <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
                     <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
@@ -155,20 +155,20 @@
     private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
     private IQueryable<Transfer> transfersUnique = new List<Transfer>().AsQueryable();
     private IQueryable<Transfer> transfers1m = new List<Transfer>().AsQueryable();
-    private IQueryable<CustomerTransfer> customerTransfer = new List<CustomerTransfer>().AsQueryable();
+    private IQueryable<SalesPromotion> salesPromotions = new List<SalesPromotion>().AsQueryable();
     private IQueryable<Customer> customers = new List<Customer>().AsQueryable();
 
     private bool subsTrf = false;
     private bool subsUniqueTrf = false;
     private bool subsTrf1m = false;
     private bool subsCst = false;
-    private bool subsCstTrf = false;
+    private bool subsSalesPromo = false;
 
     private bool expSubsTrf = false;
     private bool expSubsUniqueTrf = false;
     private bool expSubsTrf1m = false;
     private bool expSubsCst = false;
-    private bool expSubsCstTrf = false;
+    private bool expSubsSalesPromo = false;
 
     [Inject]
     private IKafkaSubscription trfSubs { get; set; } = default!;
@@ -177,7 +177,7 @@
     [Inject]
     private IKafkaSubscription trf1mSubs { get; set; } = default!;
     [Inject]
-    private IKafkaSubscription cstTrfSubs { get; set; } = default!;
+    private IKafkaSubscription salesPromoSubs { get; set; } = default!;
     [Inject]
     private IKafkaSubscription cstSubs { get; set; } = default!;
 
@@ -207,9 +207,9 @@
         transfers1m = new List<Transfer>().AsQueryable();
     }
 
-    private void ClearCstTrf()
+    private void ClearSalesPromotion()
     {
-        customerTransfer = new List<CustomerTransfer>().AsQueryable();
+        salesPromotions = new List<SalesPromotion>().AsQueryable();
     }
 
     private void ClearCst()
@@ -246,18 +246,18 @@
         subsUniqueTrf = !subsUniqueTrf;
     }
 
-    private void SubscribeCstTrf()
+    private void SubscribeSalesPromo()
     {
-        if (subsCstTrf)
+        if (subsSalesPromo)
         {
-            cstTrfSubs?.Stop();
+            salesPromoSubs?.Stop();
         }
         else
         {
-            cstTrfSubs.Run(GetCustomerTransfer, "CUSTOMER.TRANSFER");
-            expSubsCstTrf = true;
+            salesPromoSubs.Run(GetSalesPromotion, "SALES.PROMOTION");
+            expSubsSalesPromo = true;
         }
-        subsCstTrf = !subsCstTrf;
+        subsSalesPromo = !subsSalesPromo;
     }
 
     private void SubscribeTrf1m()
@@ -335,9 +335,9 @@
         });
     }
 
-    private void GetCustomerTransfer(string trData)
+    private void GetSalesPromotion(string trData)
     {
-        var csTrf = JsonSerializer.Deserialize<CustomerTransfer>(trData, options);
+        var csTrf = JsonSerializer.Deserialize<SalesPromotion>(trData, options);
         var message = $"Transfer {csTrf!.Amount} from {csTrf.Name}";
         Notify(message);
 
@@ -345,9 +345,9 @@
         {
             if (csTrf != null)
             {
-                var existing = customerTransfer.ToList<CustomerTransfer>();
+                var existing = salesPromotions.ToList<SalesPromotion>();
                 existing.Add(csTrf);
-                customerTransfer = existing.AsQueryable();
+                salesPromotions = existing.AsQueryable();
                 StateHasChanged();
             }
         });
@@ -382,7 +382,7 @@
     {
         trfSubs.Stop();
         trf1mSubs.Stop();
-        cstTrfSubs.Stop();
+        salesPromoSubs.Stop();
         cstSubs.Stop();
         uniqueTrfSubs.Stop();
         await Task.CompletedTask;
