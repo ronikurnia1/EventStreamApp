@@ -24,6 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="wwwroot\Filter.jpeg" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Update="config\cert-eem.pem">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

@@ -9,11 +9,11 @@
 
 <FluentStack Style="padding-top:1em;padding-bottom:1em" Orientation="Orientation.Horizontal">
     <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Mail())"></FluentIcon>
-    <FluentLabel Typo="Typography.H3">Send messages to IBM MQ</FluentLabel>
+    <FluentLabel Typo="Typography.H3">Sample message send to IBM MQ</FluentLabel>
 </FluentStack>
 
 <p>
-    Imagine there are 2 different systems producing messages and send them to queues
+    Suppose there are 2 different systems producing messages and send them to IBM MQ (queues)
 </p>
 <FluentStack Wrap="true" HorizontalAlignment="HorizontalAlignment.Start" Orientation="Orientation.Horizontal" Style="margin-top:1em">
     <div>
@@ -25,15 +25,15 @@
             </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
-        Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
+                        Label="@payloadCstLabel" ValueChanged="UpdateCustomerMessage" Value="@customerMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
-            Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
+                          Appearance="Appearance.Accent" @onclick="@(() => GetRandomData("CUSTOMER"))">Get random data</FluentButton>
             <FluentSpacer />
             <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
-            Disabled="@(customerMessage.Length == 0 || !isCstMessageValid)"
-            Appearance="Appearance.Accent" @onclick="@(()=>SendMessageToMQ("CUSTOMER", customerMessage))">Send message</FluentButton>
+                          Disabled="@(customerMessage.Length == 0 || !isCstMessageValid)"
+                          Appearance="Appearance.Accent" @onclick="@(()=>SendMessageToMQ("CUSTOMER", customerMessage))">Send message</FluentButton>
         </FluentStack>
     </div>
 
@@ -47,15 +47,15 @@
             </FluentStack>
         </FluentHeader>
         <FluentTextArea Spellcheck="false" Appearance="FluentInputAppearance.Filled" Rows="8" Cols="50"
-        Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
+                        Label="@payloadTrfLabel" ValueChanged="UpdateTransferMessage" Value="@transferMessage">
         </FluentTextArea>
         <FluentStack Orientation="Orientation.Horizontal" Style="padding-top:1em; padding-bottom:2em">
             <FluentButton IconStart="@(new Icons.Regular.Size24.DocumentSync())"
-            Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
+                          Appearance="Appearance.Accent" @onclick="@(()=> GetRandomData("TRANSFER"))">Get random data</FluentButton>
             <FluentSpacer />
             <FluentButton IconStart="@(new Icons.Regular.Size24.Send())"
-            Disabled="@(transferMessage.Length == 0 || !isTrfMessageValid)"
-            Appearance="Appearance.Accent" @onclick="@(() => SendMessageToMQ("TRANSFER", transferMessage))">Send message</FluentButton>
+                          Disabled="@(transferMessage.Length == 0 || !isTrfMessageValid)"
+                          Appearance="Appearance.Accent" @onclick="@(() => SendMessageToMQ("TRANSFER", transferMessage))">Send message</FluentButton>
         </FluentStack>
     </div>
 </FluentStack>
@@ -161,8 +161,9 @@
             msg.Format = MQC.MQFMT_STRING;
             msg.WriteString(messageToSend);
 
-            MQPutMessageOptions pmo = new MQPutMessageOptions();          
+            MQPutMessageOptions pmo = new MQPutMessageOptions();
             queue.Put(msg, pmo);
+
             if (queueName == "CUSTOMER")
             {
                 customerMessage = string.Empty;
