@@ -14,7 +14,7 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
 
     private Action<string> action = default!;
     private string topic = string.Empty;
-    private CancellationTokenSource stoppingToken = new CancellationTokenSource();
+    private readonly CancellationTokenSource stoppingToken = new();
 
     public void Run(Action<string> action, string topic)
     {
@@ -28,7 +28,7 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
         stoppingToken.Cancel();
     }
 
-    private void Subscribe(ILogger<KafkaSubscription> runLogger)
+    private void Subscribe(ILogger<KafkaSubscription> logger)
     {
         var consumerConfig = new ConsumerConfig
         {
@@ -42,12 +42,12 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.None,
         };
+
         using var consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build();
-        bool cancelledByUser = false;
         try
         {
             consumer.Subscribe(topic);
-            runLogger.LogInformation($"Start subscription to topic: {topic}");
+            logger.LogInformation($"STARTING subscription to topic: {topic}");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -55,26 +55,23 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
                 var message = result?.Message.Value;
                 if (message != null)
                 {
-                    runLogger.LogInformation($"Data received from topic {topic}: {message}");
+                    string info = $"Data received from topic {topic}: {message}";
+                    logger.LogInformation(info);
                     action.Invoke(message);
                 }
             }
         }
         catch (OperationCanceledException)
         {
-            runLogger.LogInformation($"End subscription to topic: {topic}");
-            cancelledByUser = true;
+            string info = $"ENDED subscription to topic: {topic}";
+            logger.LogInformation(info);
         }
         catch (Exception ex)
         {
-            runLogger.LogError(ex, ex.Message);
+            logger.LogError(ex, ex.Message);
         }
         finally
         {
-            if (!cancelledByUser)
-            {
-                runLogger.LogInformation($"End subscription to topic: {topic}");
-            }
             consumer.Unsubscribe();
             consumer.Close();
             consumer.Dispose();

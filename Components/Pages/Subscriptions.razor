@@ -111,9 +111,10 @@
             @if (subsTrf1m)
             {
                 <FluentDataGrid Items="transfers1m" ShowHover="true" ResizableColumns="true">
-                    <PropertyColumn Width="20%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
-                    <PropertyColumn Width="25%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
+                    <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Id" Sortable="true" />
+                    <PropertyColumn Width="16%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+                    <PropertyColumn Width="22%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
+                    <PropertyColumn Width="22%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
                     <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
                     <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
                 </FluentDataGrid>
@@ -352,16 +353,6 @@
         });
     }
 
-
-    private void Notify(string infoMessage)
-    {
-        this.InvokeAsync(() =>
-        {
-            ToasService.ShowSuccess(infoMessage);
-        });
-    }
-
-
     private void GetTransfer1m(string trData)
     {
         this.InvokeAsync(() =>
@@ -377,12 +368,23 @@
         });
     }
 
+
+    private void Notify(string infoMessage)
+    {
+        this.InvokeAsync(() =>
+        {
+            ToasService.ShowSuccess(infoMessage);
+        });
+    }
+
+
     public async ValueTask DisposeAsync()
     {
         trfSubs.Stop();
         trf1mSubs.Stop();
         cstTrfSubs.Stop();
         cstSubs.Stop();
+        uniqueTrfSubs.Stop();
         await Task.CompletedTask;
     }
 }
