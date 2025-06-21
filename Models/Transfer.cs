@@ -3,7 +3,7 @@
 public class Transfer
 {
     public string Id { get; set; } = string.Empty;
-    public DateTime BookedDate { get; set; }
+    public string BookedDate { get; set; } = string.Empty;
     public string FromAccount { get; set; } = string.Empty;
     public string ToAccount { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
@@ -14,7 +14,7 @@ public class Transfer
 public class Customer
 {
     public string Id { get; set; } = string.Empty;
-    public DateTime RegisteredDate { get; set; }
+    public string RegisteredDate { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string AccountNo { get; set; } = string.Empty;
@@ -24,7 +24,7 @@ public class Customer
 public class CustomerTransfer
 {
     public string Id { get; set; } = string.Empty;
-    public DateTime RegisteredDate { get; set; }
+    public string RegisteredDate { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string AccountNo { get; set; } = string.Empty;
