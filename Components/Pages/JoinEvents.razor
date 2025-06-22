@@ -274,9 +274,7 @@
 
         if (csTrf != null)
         {
-            var promoMessage = $"Congratulation <b>{csTrf.Name}</b> you've got 50% discount from all BJB's merchants!";
-            Notify(promoMessage);
-
+            Notify(csTrf.Name);
             this.InvokeAsync(() =>
             {
                 var existing = salesPromotions.ToList<SalesPromotion>();
@@ -304,11 +302,22 @@
     }
 
 
-    private void Notify(string infoMessage)
+    private void Notify(string userName)
     {
         this.InvokeAsync(() =>
         {
-            ToasService.ShowSuccess(infoMessage);
+            ToasService.ShowCommunicationToast(new ToastParameters<CommunicationToastContent>()
+            {
+                Intent = ToastIntent.Success,
+                Title = "You've got 50% discount",
+                Timeout = 5000,
+                Content = new CommunicationToastContent()
+                {
+                    Subtitle = $"Congratulation dear {userName}!",
+                    Details = "You are eligible for a 50% discount from all BJB's merchants"
+                }
+            });
+            //ToasService.ShowSuccess(infoMessage);
         });
     }
 
