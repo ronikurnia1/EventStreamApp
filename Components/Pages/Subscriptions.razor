@@ -50,7 +50,7 @@
         <ChildContent>
             <div slot="end">
                 <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(subsTrf ? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeTrf">@(subsTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
+                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(subsTrf? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeTrf">@(subsTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
                     <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
                 </FluentToolbar>
             </div>
@@ -338,19 +338,21 @@
     private void GetSalesPromotion(string trData)
     {
         var csTrf = JsonSerializer.Deserialize<SalesPromotion>(trData, options);
-        var message = $"Transfer {csTrf!.Amount} from {csTrf.Name}";
-        Notify(message);
 
-        this.InvokeAsync(() =>
+        if (csTrf != null)
         {
-            if (csTrf != null)
+            var promoMessage = $"Congratulation <b>{csTrf.Name}</b> you've got 50% discount from all BJB's merchants!";
+            Notify(promoMessage);
+
+            this.InvokeAsync(() =>
             {
                 var existing = salesPromotions.ToList<SalesPromotion>();
                 existing.Add(csTrf);
                 salesPromotions = existing.AsQueryable();
                 StateHasChanged();
-            }
-        });
+            });
+
+        }
     }
 
     private void GetTransfer1m(string trData)

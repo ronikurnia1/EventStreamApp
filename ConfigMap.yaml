@@ -98,22 +98,26 @@ data:
       },
       "AllowedHosts": "*",
       "EventStreams": {
-        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.672077fc8376796fb96a6817.ocp.techzone.ibm.com:443",
+        "BootstrapServers": "ent-event-gw-ibm-egw-rt-1-app-space.apps.6854ccd3fd6dcdc5e8ff6e2a.am1.techzone.ibm.com:443",
+        "UNIQUE.TRANSFER": {
+          "UserName": "eem-b4a5a155-f428-4e0b-875d-15c04cdeeae4",
+          "Password": "2e030262-3b96-4c27-82e1-502d7c099792"
+        },
         "TRANSFER": {
-          "UserName": "eem-94d52be8-e20f-49cd-a1fb-ef9863b82bbe",
-          "Password": "72272bc1-739c-4a89-a867-d3417ac6d3f5"
+          "UserName": "eem-1286575a-7dee-484e-8b76-3b9914401c23",
+          "Password": "23636768-3c52-4d6e-9e4d-0b698c57e2b4"
         },
         "LARGE.TRANSFER": {
-          "username": "eem-88dd3dab-e9d8-4ae5-a2f1-8f93051d54b6",
-          "password": "c96fc321-f371-4e1d-b420-c0f9ec5bcf5d"
+          "username": "eem-df5a3c2b-275d-4669-8554-17635f5b1a97",
+          "password": "87133a25-dcaf-4eda-8b33-f0170924ebd1"
         },
         "CUSTOMERS": {
-          "username": "eem-fd82afae-0836-496e-b32d-76646de0f74a",
-          "password": "b0421b76-90a1-4446-aafc-cc1353721024"
+          "username": "eem-3c02ca5b-dbf7-4283-9b83-e0f3f2c996ea",
+          "password": "8dd71f62-4e9d-4b44-9689-06337f379a1e"
         },
-        "CUSTOMER.TRANSFER": {
-          "username": "eem-48b45f8c-bd70-46b4-8218-c8559dc53bc8",
-          "password": "21606a39-64c1-4366-847d-3a3c46fe7035"
+        "SALES.PROMOTION": {
+          "username": "eem-401e631f-3728-4b29-9e60-23ee0d720eb2",
+          "password": "c9a3008b-a503-4210-aa43-c65c0cc8c6d8"
         }
       },
       "IbmMq": {
