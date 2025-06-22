@@ -30,7 +30,7 @@
             </div>
             @if (subsTrf)
             {
-                <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
+                <FluentDataGrid Style="padding-bottom:2em" Items="transfers" ShowHover="true" ResizableColumns="true">
                     <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Id" Sortable="true" />
                     <PropertyColumn Width="16%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
                     <PropertyColumn Width="22%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
@@ -57,7 +57,7 @@
             </div>
             @if (subsUniqueTrf)
             {
-                <FluentDataGrid Items="transfersUnique" ShowHover="true" ResizableColumns="true">
+                <FluentDataGrid Style="padding-bottom:2em" Items="transfersUnique" ShowHover="true" ResizableColumns="true">
                     <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Id" Sortable="true" />
                     <PropertyColumn Width="16%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
                     <PropertyColumn Width="22%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
