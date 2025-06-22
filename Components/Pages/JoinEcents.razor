@@ -1,4 +1,4 @@
-﻿@page "/subscriptions"
+﻿@page "/JoinEvents"
 @using EventStreamApp.Models
 
 @rendermode InteractiveServer
@@ -6,11 +6,11 @@
 @inject IToastService ToasService
 
 
-<PageTitle>DemoApp</PageTitle>
+<PageTitle>DemoApp: Join Events</PageTitle>
 
 <FluentStack Style="padding-top:1em; padding-bottom:2em" Orientation="Orientation.Horizontal">
-    <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Flash())"></FluentIcon>
-    <FluentLabel Typo="Typography.H3">Event Subscriptions</FluentLabel>
+    <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size32.Connected())"></FluentIcon>
+    <FluentLabel Typo="Typography.H3">Join related events within time windows</FluentLabel>
 </FluentStack>
 
 <FluentAccordion Style="padding-bottom:2em">
@@ -94,33 +94,6 @@
             }
         </ChildContent>
     </FluentAccordionItem>
-    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsUniqueTrf">
-        <HeadingTemplate>
-            <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
-                <FluentIcon Value="@(new Icons.Regular.Size24.Flash())" Color="@Color.Lightweight" Slot="start" />
-                <FluentLabel Color="Color.Lightweight">Topic: UNIQUE.TRANSFER</FluentLabel>
-            </FluentStack>
-        </HeadingTemplate>
-        <ChildContent>
-            <div slot="end">
-                <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
-                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(subsUniqueTrf? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeUniqueTrf">@(subsUniqueTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
-                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrfUnique">Clear</FluentButton>
-                </FluentToolbar>
-            </div>
-            @if (subsUniqueTrf)
-            {
-                <FluentDataGrid Items="transfersUnique" ShowHover="true" ResizableColumns="true">
-                    <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Id" Sortable="true" />
-                    <PropertyColumn Width="16%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
-                    <PropertyColumn Width="22%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
-                    <PropertyColumn Width="22%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
-                    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
-                    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
-                </FluentDataGrid>
-            }
-        </ChildContent>
-    </FluentAccordionItem>
     <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsSalesPromo">
         <HeadingTemplate>
             <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
@@ -153,27 +126,22 @@
     private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
 
     private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
-    private IQueryable<Transfer> transfersUnique = new List<Transfer>().AsQueryable();
     private IQueryable<Transfer> transfers1m = new List<Transfer>().AsQueryable();
     private IQueryable<SalesPromotion> salesPromotions = new List<SalesPromotion>().AsQueryable();
     private IQueryable<Customer> customers = new List<Customer>().AsQueryable();
 
     private bool subsTrf = false;
-    private bool subsUniqueTrf = false;
     private bool subsTrf1m = false;
     private bool subsCst = false;
     private bool subsSalesPromo = false;
 
     private bool expSubsTrf = false;
-    private bool expSubsUniqueTrf = false;
     private bool expSubsTrf1m = false;
     private bool expSubsCst = false;
     private bool expSubsSalesPromo = false;
 
     [Inject]
     private IKafkaSubscription trfSubs { get; set; } = default!;
-    [Inject]
-    private IKafkaSubscription uniqueTrfSubs { get; set; } = default!;
     [Inject]
     private IKafkaSubscription trf1mSubs { get; set; } = default!;
     [Inject]
@@ -195,11 +163,6 @@
     private void ClearTrf()
     {
         transfers = new List<Transfer>().AsQueryable();
-    }
-
-    private void ClearTrfUnique()
-    {
-        transfersUnique = new List<Transfer>().AsQueryable();
     }
 
     private void ClearTrf1m()
@@ -230,20 +193,6 @@
             expSubsTrf = true;
         }
         subsTrf = !subsTrf;
-    }
-
-    private void SubscribeUniqueTrf()
-    {
-        if (subsUniqueTrf)
-        {
-            uniqueTrfSubs.Stop();
-        }
-        else
-        {
-            uniqueTrfSubs.Run(GetUniqueTransfer, "UNIQUE.TRANSFER");
-            expSubsUniqueTrf = true;
-        }
-        subsUniqueTrf = !subsUniqueTrf;
     }
 
     private void SubscribeSalesPromo()
@@ -302,22 +251,6 @@
                 StateHasChanged();
             }
         });
-    }
-
-    private void GetUniqueTransfer(string trData)
-    {
-        this.InvokeAsync(() =>
-        {
-            var trf = JsonSerializer.Deserialize<Transfer>(trData, options);
-            if (trf != null)
-            {
-                var existing = transfersUnique.ToList<Transfer>();
-                existing.Add(trf);
-                transfersUnique = existing.AsQueryable();
-                StateHasChanged();
-            }
-        });
-
     }
 
     private void GetCustomer(string trData)
@@ -386,7 +319,6 @@
         trf1mSubs.Stop();
         salesPromoSubs.Stop();
         cstSubs.Stop();
-        uniqueTrfSubs.Stop();
         await Task.CompletedTask;
     }
 }

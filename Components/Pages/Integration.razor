@@ -1,0 +1,178 @@
+﻿@page "/integration"
+@using EventStreamApp.Models
+
+@rendermode InteractiveServer
+@implements IAsyncDisposable
+@inject IToastService ToasService
+
+
+<PageTitle>DemoApp: Integration</PageTitle>
+
+<FluentStack Style="padding-top:1em; padding-bottom:2em" Orientation="Orientation.Horizontal">
+    <FluentIcon Title="Welcome" Value="@(new Icons.Regular.Size28.PlugDisconnected())"></FluentIcon>
+    <FluentLabel Typo="Typography.H3">Integration Event Streams with IBM MQ</FluentLabel>
+</FluentStack>
+
+<FluentAccordion Style="padding-bottom:2em">
+    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsCst">
+        <HeadingTemplate>
+            <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
+                <FluentIcon Value="@(new Icons.Regular.Size24.Flash())" Color="@Color.Lightweight" Slot="start" />
+                <FluentLabel Color="Color.Lightweight">Topic: CUSTOMER</FluentLabel>
+            </FluentStack>
+        </HeadingTemplate>
+        <ChildContent>
+            <div slot="end">
+                <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(subsCst? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeCst">@(subsCst ? "Unsubscribe" : "Subscribe")</FluentButton>
+                    <FluentButton Appearance="Appearance.Lightweight" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearCst">Clear</FluentButton>
+                </FluentToolbar>
+            </div>
+            @if (subsCst)
+            {
+                <FluentDataGrid Items="customers" ShowHover="true" ResizableColumns="true">
+                    <PropertyColumn Width="15%" Property="@(t => t.Id)" Title="Cust Id" Sortable="true" />
+                    <PropertyColumn Width="20%" Property="@(t => t.Name)" Title="Name" Sortable="true" />
+                    <PropertyColumn Width="30%" Property="@(t => t.Address)" Title="Address" Sortable="true" />
+                    <PropertyColumn Width="15%" Property="@(t => t.AccountNo)" Title="Account No" Sortable="true" />
+                    <PropertyColumn Width="20%" Property="@(t => t.RegisteredDate)" Title="Registered" Sortable="true" />
+                </FluentDataGrid>
+            }
+        </ChildContent>
+    </FluentAccordionItem>
+    <FluentAccordionItem Style="background-color: var(--accent-fill-rest)" @bind-Expanded="expSubsTrf">
+        <HeadingTemplate>
+            <FluentStack VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
+                <FluentIcon Value="@(new Icons.Regular.Size24.Flash())" Color="@Color.Lightweight" Slot="start" />
+                <FluentLabel Color="Color.Lightweight">Topic: TRANSFER</FluentLabel>
+            </FluentStack>
+        </HeadingTemplate>
+        <ChildContent>
+            <div slot="end">
+                <FluentToolbar Orientation="Orientation.Horizontal" Style="background-color:transparent">
+                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(subsTrf? unsubscribeIcon : subscribeIcon)" OnClick="SubscribeTrf">@(subsTrf ? "Unsubscribe" : "Subscribe")</FluentButton>
+                    <FluentButton Appearance="Appearance.Lightweight" StopPropagation="true" IconStart="@(new Icons.Regular.Size24.Delete())" OnClick="ClearTrf">Clear</FluentButton>
+                </FluentToolbar>
+            </div>
+            @if (subsTrf)
+            {
+                <FluentDataGrid Items="transfers" ShowHover="true" ResizableColumns="true">
+                    <PropertyColumn Width="10%" Property="@(t => t.Id)" Title="Id" Sortable="true" />
+                    <PropertyColumn Width="16%" Property="@(t => t.BookedDate)" Title="Date" Sortable="true" />
+                    <PropertyColumn Width="22%" Property="@(t => t.FromAccount)" Title="From account" Sortable="true" />
+                    <PropertyColumn Width="22%" Property="@(t => t.ToAccount)" Title="To account" Sortable="true" />
+                    <PropertyColumn Width="10%" Property="@(t => t.Type)" Sortable="true" />
+                    <PropertyColumn Width="20%" Property="@(t => t.Amount)" Align="Align.End" Format="N0" Sortable="true" />
+                </FluentDataGrid>
+            }
+        </ChildContent>
+    </FluentAccordionItem>
+</FluentAccordion>
+
+@code {
+    private JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
+
+    private IQueryable<Transfer> transfers = new List<Transfer>().AsQueryable();
+    private IQueryable<Customer> customers = new List<Customer>().AsQueryable();
+
+    private bool subsTrf = false;
+    private bool subsCst = false;
+
+    private bool expSubsTrf = false;
+    private bool expSubsCst = false;
+
+    [Inject]
+    private IKafkaSubscription trfSubs { get; set; } = default!;
+    [Inject]
+    private IKafkaSubscription cstSubs { get; set; } = default!;
+
+
+    //private bool accordion1Open = false;
+
+    private Icon subscribeIcon = new Icons.Regular.Size24.Flash().WithColor(Color.Accent);
+    private Icon unsubscribeIcon = new Icons.Regular.Size24.FlashOff().WithColor(Color.Accent);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.CompletedTask;
+    }
+
+    private void ClearTrf()
+    {
+        transfers = new List<Transfer>().AsQueryable();
+    }
+
+    private void ClearCst()
+    {
+        customers = new List<Customer>().AsQueryable();
+    }
+
+
+    private void SubscribeTrf()
+    {
+        if (subsTrf)
+        {
+            trfSubs.Stop();
+        }
+        else
+        {
+            trfSubs.Run(GetTransfer, "TRANSFER");
+            expSubsTrf = true;
+        }
+        subsTrf = !subsTrf;
+    }
+
+    private void SubscribeCst()
+    {
+        if (subsCst)
+        {
+            cstSubs?.Stop();
+        }
+        else
+        {
+            cstSubs.Run(GetCustomer, "CUSTOMERS");
+            expSubsCst = true;
+        }
+        subsCst = !subsCst;
+    }
+
+
+    private void GetTransfer(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            var trf = JsonSerializer.Deserialize<Transfer>(trData, options);
+            if (trf != null)
+            {
+                var existing = transfers.ToList<Transfer>();
+                existing.Add(trf);
+                transfers = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
+
+
+    private void GetCustomer(string trData)
+    {
+        this.InvokeAsync(() =>
+        {
+            var cst = JsonSerializer.Deserialize<Customer>(trData, options);
+            if (cst != null)
+            {
+                var existing = customers.ToList<Customer>();
+                existing.Add(cst);
+                customers = existing.AsQueryable();
+                StateHasChanged();
+            }
+        });
+    }
+
+
+    public async ValueTask DisposeAsync()
+    {
+        trfSubs.Stop();
+        cstSubs.Stop();
+        await Task.CompletedTask;
+    }
+}
