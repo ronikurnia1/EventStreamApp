@@ -60,7 +60,28 @@
     </li>
 </ol>
 
-<img style="padding-bottom:2em; max-width:100%; max-height:75%" src="Integration.jpeg" />
+<img style="padding-bottom:0.5em; max-width:100%; max-height:75%" src="Integration.jpeg" />
+
+<h5>
+    Run the demo:
+</h5>
+<ol style="padding-bottom:2em">
+    <li>
+        Navigate to <a target="demo-page" href="/Integration">Integration page</a>, subscribe to both CUSTOMER and TRANSFER topics by pressing <b>Subscribe</b> button of each topic.
+    </li>
+    <li>
+        Navigate to <a target="message-page" href="/Message">Message page</a>, generate random data for both System A and B (CUSTOMER and TRANSFER message) by pressing <b>Get random data</b> button of each message to populate sample messages (payloads).
+    </li>
+    <li>
+        Press <b>Send message</b> button of both message to send the them to IBM MQ queues (CUSTOMER and TRANSFER queues)
+    </li>
+    <li>
+        Navigate to IBM MQ Manager <a target="_blank" href="https://msgmq-ibm-mq-web-app-space.apps.6856acde43511479f1f487f9.ap1.techzone.ibm.com/ibmmq/console/#/manage/qmgr/msgmq/queues">here</a> and check both messages appears on CUSTOMER and TRANSFER queue respectively (if everything is running well)
+    </li>
+    <li>
+        Navigate back to <b>Integration page</b> (just open the browser tab of Integration page that you've opened before), there you should see both cloned-messages from IBM MQ appear on CUSTOMER and TRANSFER topic respectively (if everything is running well). Please expect some delay that might happened.
+    </li>
+</ol>
 
 
 <FluentLabel Style="padding-top:1em;padding-bottom:1em" Typo="Typography.H4">
@@ -73,12 +94,31 @@
     Scenario:
 </h5>
 <p>
-    Identify transaction (transfer money) with specific amount
+    Identify transaction (transfer money) with specific amount: in this demo the Amount bigger or equal than 10M
 </p>
-<img style="padding-bottom:2em; max-width:100%; max-height:100%" src="Filter.jpeg" />
+<img style="padding-bottom:1em; max-width:100%; max-height:100%" src="Filter.jpeg" />
+<h5>
+    Run the demo:
+</h5>
+<ol style="padding-bottom:2em">
+    <li>
+        Navigate to <a target="demo-page" href="/Filter">Filter page</a>, subscribe to both TRANSFER and LARGE.TRANSFER topics by pressing <b>Subscribe</b> button of each topic.
+    </li>
+    <li>
+        Navigate to <a target="message-page" href="/Message">Message page</a>, generate random data for System B (TRANSFER message) by pressing <b>Get random data</b> button to populate sample messages (payloads).
+    </li>
+    <li>
+        Overwrite the Amount of the payload to be less than 10M, and Press <b>Send message</b> button to send it to IBM MQ queues.
+    </li>
+    <li>
+        Generate another payload and overwrite the Amount, this time to be bigger than 10M. Press <b>Send message</b> button to send it.
+    </li>
+    <li>
+        Navigate back to <b>Filter page</b> (just open the browser tab of Filter page that you've opened before), there you should see that TRANSFER topic contains all the transfer messages while LARGE.TRANSFER topic contains Amount equal or bigger than 10M (if everything is running well). Please expect some delay that might happened.
+    </li>
+</ol>
 
-
-<FluentLabel Style="padding-top:2em;padding-bottom:1em" Typo="Typography.H4">
+<FluentLabel Style="padding-top:1em;padding-bottom:1em" Typo="Typography.H4">
     3. Deduplicating repeated events
 </FluentLabel>
 <p>
@@ -91,7 +131,23 @@
     Make sure that transaction (transfer money) request that might be received more than once for the same request - due to any reasons, is processed once by the systems that cannot behave idempotently.
 </p>
 <img style="padding-bottom:1em; max-width:100%; max-height:100%" src="Deduplication.jpeg" />
-
+<h5>
+    Run the demo:
+</h5>
+<ol style="padding-bottom:2em">
+    <li>
+        Navigate to <a target="demo-page" href="/Deduplication">Deduplicating page</a>, subscribe to both TRANSFER and UNIQUE.TRANSFER topics by pressing <b>Subscribe</b> button of each topic.
+    </li>
+    <li>
+        Navigate to <a target="message-page" href="/Message">Message page</a>, generate random data for System B (TRANSFER message) and send it multiple times.
+    </li>
+    <li>
+        To simulate a duplication, send the same the payload by copying it (before you send), then you can paste and send it multiple times.
+    </li>
+    <li>
+        Navigate back to <b>Deduplication page</b> (just open the browser tab of Deduplicating page that you've opened before), there you should see that TRANSFER topic contains all the transfer messages including the duplication while UNIQUE.TRANSFER topic ONLY contains the unique ones (if everything is running well). Please expect some delay that might happened.
+    </li>
+</ol>
 
 
 <FluentLabel Style="padding-top:2em;padding-bottom:1em" Typo="Typography.H4">
@@ -106,7 +162,27 @@
 <p>
     Trigger a real-time sales promotion (notification): If a newly onboarded customer completes a transaction exceeding a specified amount within a defined number of days, they become eligible for a 50% discount from collaborating merchants.
 </p>
-<img style="padding-bottom:3em; max-width:100%; max-height:100%" src="SalesPromotion.jpeg" />
+<img style="padding-bottom:1em; max-width:100%; max-height:100%" src="SalesPromotion.jpeg" />
+<h5>
+    Run the demo:
+</h5>
+<ol style="padding-bottom:4em">
+    <li>
+        Navigate to <a target="demo-page" href="/JoinEvents">Join Events page</a>, subscribe to all topics (CUSTOMER, TRANSFER, LARGE.TRANSFER and SALES.PROMOTION) by pressing <b>Subscribe</b> button of each topic.
+    </li>
+    <li>
+        Navigate to <a target="message-page" href="/Message">Message page</a>, generate payload for System A (CUSTOMER message) and copy the "AccountNo" value of the payload before you send it.
+    </li>
+    <li>
+        Once you sent the System A payload, generate payload for System B (TRANSFER message) and overwrite the "ToAccount" value with the "AccountNo" value that you've copied before.
+    </li>
+    <li>
+        Overwrite the "Amount" value to be bigger than 10M and after that you can send the payload.
+    </li>
+    <li>
+        Navigate back to <b>Join Events page</b> (just open the browser tab of Join Events page that you've opened before), there you should see a web notification come up with title: <b>You've got 50% discount</b> at the right-top corner of the page and all topics should contains message that relates to what you've just sent especially on SALES.PROMOTION topic should contains the customer that use as payload (if everything is running well). Please expect some delay that might happened.
+    </li>
+</ol>
 
 
 
