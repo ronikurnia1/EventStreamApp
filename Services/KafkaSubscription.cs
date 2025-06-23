@@ -41,6 +41,7 @@ public class KafkaSubscription(IConfiguration configuration, ILogger<KafkaSubscr
             GroupId = "app",
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.None,
+            ClientId = $"app-{topic}"            
         };
 
         using var consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build();
